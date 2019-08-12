@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Beerland sistema de puntos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  </head>
+  <body id='body'>
+    <form class="" action="/sumar" method="post" id='formulario'>
+      <input type="number" name='DNI' id="DNI" placeholder="DNI del cliente" onkeydown="validateDNI()"><img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="number" name='monto' id="monto" placeholder="$" onkeypress="validateMonto()"><img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="button" value="Cargar" onclick="validateForm()">
+    </form>
+  </body>
+</html>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+  function validateForm() {
+    if ($('#DNI').val().length < 7 || $('#DNI').val().length > 8 || $('#monto').val() < 0) {
+      alert("Please Fill All Required Field");
+    } else {
+      document.getElementById('formulario').submit();
+    }
+  }
+
+  function validateDNI() {
+    if ($('#DNI').val().length < 7 || $('#DNI').val().length > 8) {
+      $("#alert1").fadeIn("slow");
+    } else {
+      $("#alert1").fadeOut("slow");
+    }
+  }
+
+  function validateMonto() {
+    if ($('#monto').val() < 0) {
+      $("#alert2").fadeIn("slow");
+    } else {
+      $("#alert2").fadeOut("slow");
+    }
+  }
+
+</script>
