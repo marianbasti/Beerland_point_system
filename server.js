@@ -4,6 +4,16 @@ var http = require('http').createServer(app);
 var bodyParser = require('body-parser');
 var fs = require('fs'); //require filesystem module
 var port;
+var io = require('socket.io')(http);
+var mysql = require('mysql')
+// Define our db creds
+var db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    database: 'db'
+})
+var viejospuntos;
+const multiplier = 1;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 //Crear puerto serie
@@ -105,5 +115,13 @@ app.get('/alert', function (req, res) {
 app.post("/sumar", function (req, res) {
     console.log(req.body.DNI);
     console.log(req.body.monto);
+    db.query("SELECT puntos FROM clientes WHERE dni = ?", req.body.DNI, function (err, datos_db, fields) {
+      console.log('Puntos que tiene ' + req.body.DNI + ':');
+      console.log(datos_db[0].puntos);
+      viejospuntos = datos_db[0].puntos;
+    });
+    var nuevospuntos = viejospuntos + (req.body.monto*multiplier)
+    var sql = "UPDATE clientes SET puntos = ? WHERE dni = ?";
+    db.query(sql, [nuevospuntos,req.body.DNI]);
     return res.redirect('/exito');
 });
