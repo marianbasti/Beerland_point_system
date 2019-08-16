@@ -16,68 +16,16 @@ var viejospuntos;
 const multiplier = 1;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-//Crear puerto serie
-const SerialPort = require('serialport')
+const { NFC } = require('nfc-pcsc');
+const nfc = new NFC(); // optionally you can pass logger
 
 http.listen(4000, function () {
   console.log('Server corriendo en puerto 4000, bien hecho!');
 });
 
+//INCLUIR LIBRERIA NFC
 
 
-//SERIAL
-//Enlistar puertos disponibles
-SerialPort.list(function (err, results) {
-    if (err) {
-        throw err;
-    }
-    //console.log(results);
-    console.log("Buscando lector de tarjetas...");
-    //console.log(results);
-    var i = 0;
-    if (results.length > 0) {
-      //Busco productId del Arduino Micro
-      while (results[i].productId != 8037){
-        i++;
-        if (i == results.length) {
-          console.log("Lector no encontrado.");
-          comPort = "undefined";
-          throw err;
-          break;
-        }
-      }
-      var comPort = results[i].comName;
-      console.log("Lector encontrado en puerto " + results[i].comName);
-      serialConnect (comPort);
-    } else {
-      console.log("No se han encontrado dispositivos");
-    }
-});
-
-
-function serialConnect (com) {
-  port = new SerialPort(com, {
-    baudRate: 9600
-  });
-  //Mensaje al conectarse
-  port.on('open', function() {
-    //Despierto al Arduino
-    console.log("Conectado exitosamente.");
-  });
-
-  port.on('close', function() {
-    console.log("Se ha desconectado el controlador. Esta todo bien?");
-    console.log("Reiniciar server para recuperar funcionalidad");
-  });
-}
-
-function read () // for reading
-{
-    port.on('data', function(data)
-    {
-        console.log(data.toString());
-    });
-};
 
 //Express
 app.get('/', function (req, res) {
@@ -124,4 +72,10 @@ app.post("/sumar", function (req, res) {
     var sql = "UPDATE clientes SET puntos = ? WHERE dni = ?";
     db.query(sql, [nuevospuntos,req.body.DNI]);
     return res.redirect('/exito');
+});
+
+io.on('connection', function(socket){
+  socket.on('evento', function(msg){
+
+  });
 });

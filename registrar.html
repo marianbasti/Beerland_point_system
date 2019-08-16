@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <div>
+      <input type="number" name='DNI' id="DNI" placeholder="DNI del cliente" autofocus><img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="date" name='nacimiento' id="nacimiento"><img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="button" value="Cargar" onclick="validateForm()">
+    </div>
+  </body>
+</html>
+
+
+<script type="text/javascript">
+  function validateForm() {
+    if ($('#DNI').val().length < 7 || $('#DNI').val().length > 8 || $('#monto').val() < 0) {
+      alert("Revisar datos ingresados");
+    } else {
+      document.getElementById('formulario').submit();
+    }
+  }
+</script>
