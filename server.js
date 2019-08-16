@@ -13,6 +13,7 @@ var db = mysql.createConnection({
     database: 'db'
 })
 var viejospuntos;
+var errorstatus;
 const multiplier = 1;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -107,8 +108,8 @@ app.get('/alert', function (req, res) {
   res.sendFile(__dirname + '/alert.png');
 });
 
-app.get('/jquery.validate.js', function (req, res) {
-  res.sendFile(__dirname + '/jquery.validate.js');
+app.get('/jquery-3.4.1.min.js', function (req, res) {
+  res.sendFile(__dirname + '/jquery-3.4.1.min.js');
 });
 
 app.get('/jquery.validate.min.js', function (req, res) {
@@ -135,26 +136,26 @@ app.post("/registrar", function (req, res) {
     console.log(req.body.localidad);
     console.log(req.body.sexo);
     console.log(req.body.tarjeta);
+    errorstatus = 0;
     var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
     db.query(db_query, req.body.documento, function (err, datos_db, fields) {
-      console.log(datos_db);
       if (datos_db[0].exist == 1) {
         console.log("Error registrando cliente: Documento ya existe");
-        res.redirect('/doc_exist');
-        res.sendStatus(200);
+        return res.redirect('/doc_exist');
+      } else {
+        db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
+        db.query(db_query, req.body.tarjeta, function (err, datos_db, fields) {
+          if (datos_db[0].exist == 1) {
+            console.log("Error registrando cliente: Tarjeta ya registrada");
+              return res.redirect('/card_exist');
+          } else {
+            var db_query = "INSERT into clientes (`documento`, `nacimiento`, `localidad`, `sexo`, `tarjeta`) VALUES (?, ?, ?, ?, ?)"
+            db.query(db_query, [req.body.documento, req.body.nacimiento,req.body.localidad,req.body.sexo,req.body.tarjeta]);
+            return res.redirect('/exito');
+          };
+        });
       };
     });
-    var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
-    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
-      if (datos_db[0].exist == 1) {
-        console.log("Error registrando cliente: Tarjeta ya registrada");
-        return res.redirect('/card_exist');
-        res.sendStatus(200);
-      };
-    });
-    var db_query = "INSERT into clientes (`documento`, `nacimiento`, `localidad`, `sexo`, `tarjeta`) VALUES (?, ?, ?, ?, ?)"
-    db.query(db_query, [req.body.documento, req.body.nacimiento,req.body.localidad,req.body.sexo,req.body.tarjeta]);
-    return res.redirect('/exito');
 });
 
 io.on('connection', function(socket){
