@@ -5,21 +5,41 @@
     <title></title>
   </head>
   <body>
-    <div>
-      <input type="number" name='DNI' id="DNI" placeholder="DNI del cliente" autofocus><img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
-      <input type="date" name='nacimiento' id="nacimiento"><img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
-      <input type="button" value="Cargar" onclick="validateForm()">
-    </div>
+    <form class="contenedor" action="/registrar" method="post" id='formulario'>
+      <input type="number" name='documento' id="documento" placeholder="Documento del cliente" autofocus> <img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="date" name='nacimiento' id="nacimiento"> <img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <select name='sexo' id='sexo'>
+        <option value="m">Masculino</option>
+        <option value="f">Femenino</option>
+        <option value="o">Otro</option>
+      </select> <img id='alert3' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="text" name="localidad" id="localidad" placeholder="Localidad"> <img id='alert4' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="text" name="tarjeta" id="tarjeta" placeholder="Nº Tarjeta"> <img id='alert5' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="button" id='cargar' value="Cargar">
+    </form>
   </body>
 </html>
 
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
 
 <script type="text/javascript">
-  function validateForm() {
-    if ($('#DNI').val().length < 7 || $('#DNI').val().length > 8 || $('#monto').val() < 0) {
-      alert("Revisar datos ingresados");
-    } else {
+  document.getElementById('cargar').addEventListener("click", function() {
+    if (validateForm()) {
       document.getElementById('formulario').submit();
+    } else {
+      alert("Revisar campos")
+    }
+
+  });
+  function validateForm() {
+    if ($('#documento').val().length < 7  || $('#nacimiento').val() == '' || !$('sexo').val() == '' || !$('localidad').val() == '') {
+      return(false);
+    } else {
+      return(true);
     }
   }
 </script>

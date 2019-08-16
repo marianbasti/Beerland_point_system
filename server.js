@@ -24,7 +24,8 @@ http.listen(4000, function () {
 });
 
 //INCLUIR LIBRERIA NFC
-/*nfc.on('reader', reader => {
+/*
+nfc.on('reader', reader => {
 
 	console.log(`${reader.reader.name}  device attached`);
 
@@ -41,9 +42,9 @@ http.listen(4000, function () {
 		// [always] String standard: same as type
 		// [only TAG_ISO_14443_3] String uid: tag uid
 		// [only TAG_ISO_14443_4] Buffer data: raw data from select APDU response
-
 		console.log(`${reader.reader.name}  card detected`, card);
 
+    socket.emit('rfid', tarjeta)
 	});
 
 	reader.on('card.off', card => {
@@ -94,8 +95,24 @@ app.get('/acercade', function (req, res) {
   res.sendFile(__dirname + '/acercade.html');
 });
 
+app.get('/doc_exist', function (req, res) {
+  res.sendFile(__dirname + '/doc_exist.html');
+});
+
+app.get('/card_exist', function (req, res) {
+  res.sendFile(__dirname + '/card_exist.html');
+});
+
 app.get('/alert', function (req, res) {
   res.sendFile(__dirname + '/alert.png');
+});
+
+app.get('/jquery.validate.js', function (req, res) {
+  res.sendFile(__dirname + '/jquery.validate.js');
+});
+
+app.get('/jquery.validate.min.js', function (req, res) {
+  res.sendFile(__dirname + '/jquery.validate.min.js');
 });
 
 app.post("/sumar", function (req, res) {
@@ -109,6 +126,34 @@ app.post("/sumar", function (req, res) {
     var nuevospuntos = viejospuntos + (req.body.monto*multiplier)
     var sql = "UPDATE clientes SET puntos = ? WHERE dni = ?";
     db.query(sql, [nuevospuntos,req.body.DNI]);
+    return res.redirect('/exito');
+});
+
+app.post("/registrar", function (req, res) {
+    console.log(req.body.documento);
+    console.log(req.body.nacimiento);
+    console.log(req.body.localidad);
+    console.log(req.body.sexo);
+    console.log(req.body.tarjeta);
+    var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
+    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+      console.log(datos_db);
+      if (datos_db[0].exist == 1) {
+        console.log("Error registrando cliente: Documento ya existe");
+        res.redirect('/doc_exist');
+        res.sendStatus(200);
+      };
+    });
+    var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
+    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+      if (datos_db[0].exist == 1) {
+        console.log("Error registrando cliente: Tarjeta ya registrada");
+        return res.redirect('/card_exist');
+        res.sendStatus(200);
+      };
+    });
+    var db_query = "INSERT into clientes (`documento`, `nacimiento`, `localidad`, `sexo`, `tarjeta`) VALUES (?, ?, ?, ?, ?)"
+    db.query(db_query, [req.body.documento, req.body.nacimiento,req.body.localidad,req.body.sexo,req.body.tarjeta]);
     return res.redirect('/exito');
 });
 
