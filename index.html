@@ -5,7 +5,7 @@
     <title>Beerland sistema de puntos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-      body {color: white; background-color: powderblue;}
+      body {color: white; background-color: black;}
       .contenedor {
         margin: auto;
         width: 40%;
@@ -19,7 +19,7 @@
       .botonesfront {
         position: absolute;
         width: 100%;
-        height: 5%;
+        height: 10%;
         bottom: 0px
       }
       .front {
@@ -36,7 +36,10 @@
   <body id='body'>
     <div class='front' id='front'>
       <div style="padding-top: 15%; text-align: center">DESLIZE TARJETA PARA COMENZAR</div>
-      <input class="botonesfront" type="button" id="registrar" value="Registrar usuario nuevo"><br>
+      <div class="botonesfront">
+        <input class="botones" type="button" id="registrar" value="Registrar usuario nuevo"><br>
+        <input class="botones" type="button" id="eliminar" value="Eliminar usuario">
+      </div>
     </div>
   </body>
 </html>
@@ -47,6 +50,9 @@
 <script type="text/javascript">
   $('#registrar').click( function() {
     $("#body").load("./registrar");
+  });
+  $('#eliminar').click( function() {
+    $("#body").load("./eliminar");
   });
 
 </script>

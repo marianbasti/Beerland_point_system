@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      body {
+        left: 0px;
+      	top: 0px;
+      	width: 100%;
+      	height: 100%;
+        background-color: #000000
+        color: white
+      }
+      select, input {
+        margin: 2vh;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="contenedor" action="/eliminar" method="post" id='formulario'>
+      <input type="number" name='documento' id="documento" placeholder="Documento del cliente" autofocus> <img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="button" id='eliminar' value="Eliminar">
+    </form>
+  </body>
+</html>
+
+<script
+  src="/jquery-3.4.1.min.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+  document.getElementById('eliminar').addEventListener("click", function() {
+    document.getElementById('formulario').submit();
+  });
+
+</script>

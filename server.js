@@ -3,7 +3,6 @@ var app = express();
 var http = require('http').createServer(app);
 var bodyParser = require('body-parser');
 var fs = require('fs'); //require filesystem module
-var port;
 var io = require('socket.io')(http);
 var mysql = require('mysql')
 // Define our db creds
@@ -13,7 +12,6 @@ var db = mysql.createConnection({
     database: 'db'
 })
 var viejospuntos;
-var errorstatus;
 const multiplier = 1;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -88,8 +86,8 @@ app.get('/registrar', function (req, res) {
   res.sendFile(__dirname + '/registrar.html');
 });
 
-app.get('/verpuntos', function (req, res) {
-  res.sendFile(__dirname + '/verpuntos.html');
+app.get('/eliminar', function (req, res) {
+  res.sendFile(__dirname + '/eliminar.html');
 });
 
 app.get('/acercade', function (req, res) {
@@ -98,6 +96,10 @@ app.get('/acercade', function (req, res) {
 
 app.get('/doc_exist', function (req, res) {
   res.sendFile(__dirname + '/doc_exist.html');
+});
+
+app.get('/doc_noexist', function (req, res) {
+  res.sendFile(__dirname + '/doc_noexist.html');
 });
 
 app.get('/card_exist', function (req, res) {
@@ -115,6 +117,7 @@ app.get('/jquery-3.4.1.min.js', function (req, res) {
 app.get('/jquery.validate.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery.validate.min.js');
 });
+
 
 app.post("/sumar", function (req, res) {
     console.log(req.body.DNI);
@@ -136,7 +139,6 @@ app.post("/registrar", function (req, res) {
     console.log(req.body.localidad);
     console.log(req.body.sexo);
     console.log(req.body.tarjeta);
-    errorstatus = 0;
     var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
     db.query(db_query, req.body.documento, function (err, datos_db, fields) {
       if (datos_db[0].exist == 1) {
@@ -149,13 +151,26 @@ app.post("/registrar", function (req, res) {
             console.log("Error registrando cliente: Tarjeta ya registrada");
               return res.redirect('/card_exist');
           } else {
-            var db_query = "INSERT into clientes (`documento`, `nacimiento`, `localidad`, `sexo`, `tarjeta`) VALUES (?, ?, ?, ?, ?)"
+            db_query = "INSERT into clientes (`documento`, `nacimiento`, `localidad`, `sexo`, `tarjeta`) VALUES (?, ?, ?, ?, ?)"
             db.query(db_query, [req.body.documento, req.body.nacimiento,req.body.localidad,req.body.sexo,req.body.tarjeta]);
             return res.redirect('/exito');
           };
         });
       };
     });
+});
+
+app.post("/eliminar", function (req, res) {
+  var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
+  db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+   if (datos_db[0].exist == 1) {
+    var db_query= "DELETE FROM `clientes` WHERE `clientes`.`documento` = ?"
+    db.query(db_query,req.body.documento);
+    return res.redirect('/exito');
+   } else {
+    return res.redirect('/doc_noexist');
+   }
+ });
 });
 
 io.on('connection', function(socket){
