@@ -74,6 +74,10 @@ app.get('/sumar', function (req, res) {
   res.sendFile(__dirname + '/sumar.html');
 });
 
+app.get('/cliente', function (req, res) {
+  res.sendFile(__dirname + '/cliente.html');
+});
+
 app.get('/exito', function (req, res) {
   res.sendFile(__dirname + '/exito.html');
 });
@@ -117,7 +121,6 @@ app.get('/jquery-3.4.1.min.js', function (req, res) {
 app.get('/jquery.validate.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery.validate.min.js');
 });
-
 
 app.post("/sumar", function (req, res) {
     console.log(req.body.DNI);
@@ -164,17 +167,35 @@ app.post("/eliminar", function (req, res) {
   var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
   db.query(db_query, req.body.documento, function (err, datos_db, fields) {
    if (datos_db[0].exist == 1) {
-    var db_query= "DELETE FROM `clientes` WHERE `clientes`.`documento` = ?"
+    var db_query= "DELETE FROM `clientes` WHERE documento = ?"
     db.query(db_query,req.body.documento);
     return res.redirect('/exito');
    } else {
-    return res.redirect('/doc_noexist');
+     console.log("ERROR: Documento ingresado no está regristrado")
+     return res.redirect('/doc_noexist');
    }
  });
 });
 
 io.on('connection', function(socket){
-  socket.on('evento', function(msg){
-
-  });
+  socket.on('cargarcliente', function(tarjeta){
+    var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
+    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+     if (datos_db[0].exist == 1) {
+      var db_query= "SELECT FROM `clientes` WHERE `clientes`.`documento` = ?"
+      db.query(db_query,req.body.documento);
+      return res.redirect('/exito');
+     } else {
+       console.log("ERROR: Documento ingresado no está regristrado")
+       return res.redirect('/doc_noexist');
+     }
+   });
+ });
+/*
+ setTimeout(function() {
+   var card = 123456789
+   socket.emit('rfid', card);
+   console.log("emulando tarjeta: " + card)
+ }, 3000)
+ */
 });

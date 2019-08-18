@@ -35,7 +35,7 @@
   </head>
   <body id='body'>
     <div class='front' id='front'>
-      <div style="padding-top: 15%; text-align: center">DESLIZE TARJETA PARA COMENZAR</div>
+      <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
       <div class="botonesfront">
         <input class="botones" type="button" id="registrar" value="Registrar usuario nuevo"><br>
         <input class="botones" type="button" id="eliminar" value="Eliminar usuario">
@@ -47,6 +47,8 @@
 <script
   src="/jquery-3.4.1.min.js"></script>
 
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+
 <script type="text/javascript">
   $('#registrar').click( function() {
     $("#body").load("./registrar");
@@ -55,4 +57,11 @@
     $("#body").load("./eliminar");
   });
 
+  jQuery(function($){
+    var socket = io.connect('http://localhost:4000');
+    socket.on('rfid', function(rfidtag) {
+      $("#body").load("./cliente");
+      socket.emit('cargarcliente', rfidtag)
+    })
+  });
 </script>
