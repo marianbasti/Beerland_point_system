@@ -5,10 +5,22 @@
     <title></title>
   </head>
   <body>
-
+    <div>
+      <p>Documento:</p> <p id="documento"></p>
+    </div>
   </body>
 </html>
 
+<script
+  src="/jquery-3.4.1.min.js"></script>
+
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+
 <script type="text/javascript">
-  
+  jQuery(function($){
+    var socket = io.connect('http://localhost:4000');
+    socket.on('datoscliente', function(cliente) {
+      $("#documento").val() = cliente;
+    })
+  });
 </script>

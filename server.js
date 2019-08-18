@@ -110,6 +110,10 @@ app.get('/card_exist', function (req, res) {
   res.sendFile(__dirname + '/card_exist.html');
 });
 
+app.get('/card_noexist', function (req, res) {
+  res.sendFile(__dirname + '/card_noexist.html');
+});
+
 app.get('/alert', function (req, res) {
   res.sendFile(__dirname + '/alert.png');
 });
@@ -180,22 +184,23 @@ app.post("/eliminar", function (req, res) {
 io.on('connection', function(socket){
   socket.on('cargarcliente', function(tarjeta){
     var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
-    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+    db.query(db_query, tarjeta, function (err, datos_db, fields) {
      if (datos_db[0].exist == 1) {
-      var db_query= "SELECT FROM `clientes` WHERE `clientes`.`documento` = ?"
-      db.query(db_query,req.body.documento);
-      return res.redirect('/exito');
+      var db_query= "SELECT FROM `clientes` WHERE tarjeta = ?"
+      db.query(db_query,tarjeta, function () {
+        socket.emit('datoscliente', db_query)
+      });
      } else {
-       console.log("ERROR: Documento ingresado no está regristrado")
-       return res.redirect('/doc_noexist');
+       console.log("ERROR: Tarjeta no regristrada");
+       return res.redirect('/card_noexist');
      }
    });
  });
-/*
+
  setTimeout(function() {
    var card = 123456789
    socket.emit('rfid', card);
    console.log("emulando tarjeta: " + card)
  }, 3000)
- */
+
 });
