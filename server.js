@@ -186,13 +186,15 @@ io.on('connection', function(socket){
     var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
     db.query(db_query, tarjeta, function (err, datos_db, fields) {
      if (datos_db[0].exist == 1) {
-      var db_query= "SELECT FROM `clientes` WHERE tarjeta = ?"
-      db.query(db_query,tarjeta, function () {
-        socket.emit('datoscliente', db_query)
+      var db_query= "SELECT * FROM clientes WHERE tarjeta = ?"
+      console.log(tarjeta);
+      db.query(db_query, tarjeta, function (err, cliente, fields) {
+        socket.emit('datoscliente', cliente);
+        console.log(cliente[0].documento);
       });
      } else {
        console.log("ERROR: Tarjeta no regristrada");
-       return res.redirect('/card_noexist');
+       //return res.redirect('/card_noexist');
      }
    });
  });

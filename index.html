@@ -14,7 +14,7 @@
       }
       .botones {
         width: 100%;
-        height: 50%;
+        height: 25%;
       }
       .botonesfront {
         position: absolute;
@@ -29,11 +29,55 @@
       	top: 0px;
       	width: 100%;
       	height: 100%;
+        z-index: 999
+        background-color: #000000
+      }
+      .cliente {
+        position: fixed;
+        opacity: 100%;
+      	left: 0px;
+      	top: 0px;
+      	width: 100%;
+      	height: 100%;
+        z-index: 998
+        background-color: #0D0000
+      }
+      .contenedor {
+        position: fixed;
+        opacity: 100%;
+      	left: 30%;
+      	top: 15%;
+      	width: 40%;
+      	height: 50%;
+        z-index: 999;
         background-color: #000000
       }
     </style>
   </head>
   <body id='body'>
+    <div class="cliente" id="cliente">
+      <div class="contenedor" id="contenedor">
+        <table style="width:100%; margin: 0px">
+          <tr>
+            <th>Documento: </th>
+            <td id="documento"></td>
+          </tr>
+          <tr>
+            <th>ID tarjeta: </th>
+            <td id="tarjeta"></td>
+          </tr>
+          <tr>
+            <th>Nacimiento: </th>
+            <td id="nacimiento"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="botonesfront">
+        <input class="botones" type="button" id="cargar" value="Cargar puntos">
+        <input class="botones" type="button" id="usar" value="Usar puntos">
+        <input class="botones" type="button" id="eliminar" value="Eliminar cliente">
+      </div>
+    </div>
     <div class='front' id='front'>
       <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
       <div class="botonesfront">
@@ -44,24 +88,37 @@
   </body>
 </html>
 
-<script
-  src="/jquery-3.4.1.min.js"></script>
+<script src="/jquery-3.4.1.min.js"></script>
 
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
+  $('#cliente').hide();
   $('#registrar').click( function() {
     $("#body").load("./registrar");
   });
   $('#eliminar').click( function() {
     $("#body").load("./eliminar");
   });
+  $('#cargar').click( function() {
+
+  });
 
   jQuery(function($){
     var socket = io.connect('http://localhost:4000');
     socket.on('rfid', function(rfidtag) {
-      $("#body").load("./cliente");
-      socket.emit('cargarcliente', rfidtag)
+      yeet();
+      socket.emit('cargarcliente', rfidtag);
+    });
+    socket.on('datoscliente', function(cliente){
+      $('#cliente').show('slow');
+      $('#documento').html(cliente[0].documento);
+      $('#tarjeta').html(cliente[0].tarjeta);
+      $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
     })
   });
+
+  function yeet() {
+    $("#front").hide('slow');
+  }
 </script>
