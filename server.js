@@ -126,20 +126,6 @@ app.get('/jquery.validate.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery.validate.min.js');
 });
 
-app.post("/sumar", function (req, res) {
-    console.log(req.body.DNI);
-    console.log(req.body.monto);
-    db.query("SELECT puntos FROM clientes WHERE dni = ?", req.body.DNI, function (err, datos_db, fields) {
-      console.log('Puntos que tiene ' + req.body.DNI + ':');
-      console.log(datos_db[0].puntos);
-      viejospuntos = datos_db[0].puntos;
-    });
-    var nuevospuntos = viejospuntos + (req.body.monto*multiplier)
-    var sql = "UPDATE clientes SET puntos = ? WHERE dni = ?";
-    db.query(sql, [nuevospuntos,req.body.DNI]);
-    return res.redirect('/exito');
-});
-
 app.post("/registrar", function (req, res) {
     console.log(req.body.documento);
     console.log(req.body.nacimiento);
@@ -181,6 +167,14 @@ app.post("/eliminar", function (req, res) {
    }
  });
 });
+
+app.post("/sumar", function (req, res) {
+  var puntosNuevos = req.body.monto*multiplier + req.body.puntosactuales;
+  console.log(req.body);
+  var db_query= "UPDATE `clientes` SET puntos = ? WHERE documento = ?"
+  db.query(db_query, [puntosNuevos, req.body.documentoactual]);
+  return res.redirect('/exito');
+ });
 
 io.on('connection', function(socket){
   socket.on('cargarcliente', function(tarjeta){

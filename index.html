@@ -38,7 +38,7 @@
       }
       .cliente {
         position: fixed;
-        opacity: 100%;
+        opacity: 0%;
       	left: 0px;
       	top: 0px;
       	width: 100%;
@@ -79,8 +79,20 @@
             <th>Nacimiento: </th>
             <td id="nacimiento"></td>
           </tr>
+          <tr>
+            <th>Puntos disponibles: </th>
+            <td id="puntos"></td>
+          </tr>
         </table>
       </div>
+    </div>
+    <div class="cliente" id='cargarpuntos'>
+      <form class="contenedor" action="/sumar" method="post">
+        <input style="height: 10%" type="number" name="monto" placeholder="Monto">
+        <input style="height: 7%; margin: 5px" type="submit" id="enviarpuntos" value="Cargar">
+        <input type="text" name="puntosactuales" id="puntosactuales">
+        <input type="text" name="documentoactual" id="documentoactual">
+      </form>
     </div>
     <div class='front' id='front'>
       <div class="botonesfront">
@@ -98,12 +110,17 @@
 
 <script type="text/javascript">
   $('#cliente').hide();
+  $('#cargarpuntos').hide();
   $('#registrar').click( function() {
     $("#body").load("./registrar");
   });
   $('#eliminar').click( function() {
     $("#body").load("./eliminar");
   });
+  $('#cargar').click( function() {
+    $("#body").load("./cargar");
+  });
+
   $('#eliminarthis').click( function() {
     event.preventDefault();
     var newForm = jQuery('<form>', {
@@ -118,7 +135,12 @@
     newForm.submit();
   });
   $('#cargar').click( function() {
-
+    var puntos = $('#puntos').val();
+    var doc = $('#documento').val();
+    $('#cargarpuntos').show('slow');
+    $('#puntosactuales').val(puntos);
+    $('#documentoactuales').val(doc);
+    $('#cliente').hide('slow');
   });
 
   jQuery(function($){
@@ -132,6 +154,7 @@
       $('#documento').html(cliente[0].documento);
       $('#tarjeta').html(cliente[0].tarjeta);
       $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
+      $('#puntos').html(cliente[0].puntos);
     })
     socket.on('reload', function(a) {
       window.location.reload();
