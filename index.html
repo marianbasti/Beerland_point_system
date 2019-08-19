@@ -6,21 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
       body {color: white; background-color: black;}
-      .contenedor {
-        margin: auto;
-        width: 40%;
-        padding: 10px;
-      	z-index: 9998;
+      .botones3 {
+        width: 33%;
+        height: 100%;
       }
-      .botones {
-        width: 100%;
-        height: 25%;
+      .botones2 {
+        width: 49%;
+        height: 100%;
       }
       .botonesfront {
         position: absolute;
         width: 100%;
         height: 10%;
-        bottom: 0px
+        bottom: 2%
+      }
+      .botonescli {
+        position: absolute;
+        width: 100%;
+        height: 20%;
+        bottom: 1%
       }
       .front {
         position: fixed;
@@ -45,9 +49,9 @@
       .contenedor {
         position: fixed;
         opacity: 100%;
-      	left: 30%;
-      	top: 15%;
-      	width: 40%;
+      	left: 33%;
+      	top: 10%;
+      	width: 35%;
       	height: 50%;
         z-index: 999;
         background-color: #000000
@@ -56,6 +60,11 @@
   </head>
   <body id='body'>
     <div class="cliente" id="cliente">
+      <div class="botonescli">
+        <input class="botones3" type="button" id="cargar" value="Cargar puntos">
+        <input class="botones3" type="button" id="usar" value="Usar puntos">
+        <input class="botones3" type="button" id="eliminarthis" value="Eliminar este cliente">
+      </div>
       <div class="contenedor" id="contenedor">
         <table style="width:100%; margin: 0px">
           <tr>
@@ -72,18 +81,13 @@
           </tr>
         </table>
       </div>
-      <div class="botonesfront">
-        <input class="botones" type="button" id="cargar" value="Cargar puntos">
-        <input class="botones" type="button" id="usar" value="Usar puntos">
-        <input class="botones" type="button" id="eliminar" value="Eliminar cliente">
-      </div>
     </div>
     <div class='front' id='front'>
-      <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
       <div class="botonesfront">
-        <input class="botones" type="button" id="registrar" value="Registrar usuario nuevo"><br>
-        <input class="botones" type="button" id="eliminar" value="Eliminar usuario">
+        <input class="botones2" type="button" id="registrar" value="Registrar usuario nuevo">
+        <input class="botones2" type="button" id="eliminar" value="Eliminar cliente">
       </div>
+      <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
     </div>
   </body>
 </html>
@@ -100,6 +104,19 @@
   $('#eliminar').click( function() {
     $("#body").load("./eliminar");
   });
+  $('#eliminarthis').click( function() {
+    event.preventDefault();
+    var newForm = jQuery('<form>', {
+        'action': '/eliminar',
+        'method': 'post'
+    }).append(jQuery('<input>', {
+        'name': 'documento',
+        'value': $('#documento').html(),
+        'type': 'hidden'
+    }));
+    $(document.body).append(newForm);
+    newForm.submit();
+  });
   $('#cargar').click( function() {
 
   });
@@ -107,14 +124,17 @@
   jQuery(function($){
     var socket = io.connect('http://localhost:4000');
     socket.on('rfid', function(rfidtag) {
-      yeet();
       socket.emit('cargarcliente', rfidtag);
     });
     socket.on('datoscliente', function(cliente){
+      yeet();
       $('#cliente').show('slow');
       $('#documento').html(cliente[0].documento);
       $('#tarjeta').html(cliente[0].tarjeta);
       $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
+    })
+    socket.on('reload', function(a) {
+      window.location.reload();
     })
   });
 

@@ -168,8 +168,9 @@ app.post("/registrar", function (req, res) {
 });
 
 app.post("/eliminar", function (req, res) {
-  var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
-  db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+   var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
+   db.query(db_query, req.body.documento, function (err, datos_db, fields) {
+   console.log(req);
    if (datos_db[0].exist == 1) {
     var db_query= "DELETE FROM `clientes` WHERE documento = ?"
     db.query(db_query,req.body.documento);
@@ -187,22 +188,20 @@ io.on('connection', function(socket){
     db.query(db_query, tarjeta, function (err, datos_db, fields) {
      if (datos_db[0].exist == 1) {
       var db_query= "SELECT * FROM clientes WHERE tarjeta = ?"
-      console.log(tarjeta);
       db.query(db_query, tarjeta, function (err, cliente, fields) {
         socket.emit('datoscliente', cliente);
-        console.log(cliente[0].documento);
       });
      } else {
        console.log("ERROR: Tarjeta no regristrada");
-       //return res.redirect('/card_noexist');
+       socket.emit('reload', 1);
      }
    });
  });
 
  setTimeout(function() {
-   var card = 123456789
+   var card = 987654321
    socket.emit('rfid', card);
    console.log("emulando tarjeta: " + card)
- }, 3000)
+ }, 15000)
 
 });
