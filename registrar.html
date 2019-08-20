@@ -58,7 +58,7 @@
   jQuery(function($){
     var socket = io.connect('http://localhost:4000');
     socket.on('rfid', function(rfidtag) {
-      $('#tarjeta').val() = rfidtag;
+      $('#tarjeta').val(rfidtag);
     })
   });
 </script>

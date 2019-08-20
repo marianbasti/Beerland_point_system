@@ -48,13 +48,25 @@
       }
       .contenedor {
         position: fixed;
-        opacity: 100%;
-      	left: 33%;
+        opacity: 0%;
+      	left: 30%;
       	top: 10%;
-      	width: 35%;
+      	width: 40%;
       	height: 50%;
         z-index: 999;
         background-color: #000000
+      }
+      .listaitems {
+        width: 80%;
+      }
+      .listaitems tr:nth-child(even){background-color: #111111;}
+      .listaitems tr:hover {background-color: #222222;}
+      .items {
+        position: absolute;
+        width: 30%;
+        height: 50%;
+        left: 70%;
+        top: 10%
       }
     </style>
   </head>
@@ -86,14 +98,44 @@
         </table>
       </div>
     </div>
+
+
     <div class="cliente" id='cargarpuntos'>
       <form class="contenedor" action="/sumar" method="post">
-        <input style="height: 10%" type="number" name="monto" placeholder="Monto">
-        <input style="height: 7%; margin: 5px" type="submit" id="enviarpuntos" value="Cargar">
-        <input type="text" name="puntosactuales" id="puntosactuales">
-        <input type="text" name="documentoactual" id="documentoactual">
+        <table class='listaitems' id='listaitems'>
+          <tr>
+            <th>Item</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th></th>
+          </tr>
+          <tr class='summary'>
+            <th>Total</th>
+            <th> </th>
+            <th> </th>
+            <th class='total'></th>
+          </tr>
+        </table>
+        <input style="top: 90%; right: 0px" type="submit" id="enviarpuntos" value="Cargar">
       </form>
+
+      <div class="items">
+        <select name="selectitems" id='items'>
+          <option value="Birra1|70">Birra1</option>
+          <option value="Birra2|85">Birra2</option>
+          <option value="Birra3|75">Birra3</option>
+          <option value="Comida1|250">Comida1</option>
+          <option value="Comida2|185">Comida2</option>
+          <option value="Comida3|300">Comida3</option>
+          <option value="Bebida1|60">Bebida1</option>
+          <option value="Bebida2|80">Bebida2</option>
+        </select>
+        <input type="button" id="agregaritem" value="Añadir item">
+      </div>
+
     </div>
+
+
     <div class='front' id='front'>
       <div class="botonesfront">
         <input class="botones2" type="button" id="registrar" value="Registrar usuario nuevo">
@@ -105,6 +147,8 @@
 </html>
 
 <script src="/jquery-3.4.1.min.js"></script>
+
+<script src="/jquery.sumtr.js"></script>
 
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
@@ -119,6 +163,16 @@
   });
   $('#cargar').click( function() {
     $("#body").load("./cargar");
+  });
+
+  $('#agregaritem').click( function() {
+    var itemagregado = $('#items').val().split("|");
+    var markup = "<tr><td>" + itemagregado[0] + "</td><td><input type='number' style='text-align: right; background-color: #303030; color: white' value='1' min='1'></td><td class='sum'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+    $("#listaitems tr:first").after(markup);
+    $('#listaitems').sumtr();
+  });
+  $('#listaitems').on('click', '.quitardelista', function(){
+    $(this).closest('tr').remove();
   });
 
   $('#eliminarthis').click( function() {

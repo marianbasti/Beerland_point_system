@@ -122,6 +122,10 @@ app.get('/jquery-3.4.1.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery-3.4.1.min.js');
 });
 
+app.get('/jquery.sumtr.js', function (req, res) {
+  res.sendFile(__dirname + '/jquery.sumtr.js');
+});
+
 app.get('/jquery.validate.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery.validate.min.js');
 });
@@ -156,7 +160,6 @@ app.post("/registrar", function (req, res) {
 app.post("/eliminar", function (req, res) {
    var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
-   console.log(req);
    if (datos_db[0].exist == 1) {
     var db_query= "DELETE FROM `clientes` WHERE documento = ?"
     db.query(db_query,req.body.documento);
@@ -196,6 +199,6 @@ io.on('connection', function(socket){
    var card = 987654321
    socket.emit('rfid', card);
    console.log("emulando tarjeta: " + card)
- }, 15000)
+ }, 1000)
 
 });
