@@ -11,7 +11,7 @@ var db = mysql.createConnection({
     user: 'root',
     database: 'db'
 })
-var viejospuntos;
+//MULTIPLICADOR PARA DETERMINAR CUANTOS PUNTOS POR PLATA GASTADA
 const multiplier = 1;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -66,24 +66,13 @@ nfc.on('error', err => {
 */
 
 //Express
+//Sirvo las pagias y librerias pa que funque
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.get('/sumar', function (req, res) {
-  res.sendFile(__dirname + '/sumar.html');
-});
-
-app.get('/cliente', function (req, res) {
-  res.sendFile(__dirname + '/cliente.html');
-});
-
 app.get('/exito', function (req, res) {
   res.sendFile(__dirname + '/exito.html');
-});
-
-app.get('/usar', function (req, res) {
-  res.sendFile(__dirname + '/usar.html');
 });
 
 app.get('/registrar', function (req, res) {
@@ -130,6 +119,8 @@ app.get('/jquery.validate.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery.validate.min.js');
 });
 
+//CUANDO ME PIDEN REGISTRAR UN CLIENTE
+//ME ASEGURO QUE NI EL DOCUMENTO NI LA TARJETA ESTEN REGISTRADAS
 app.post("/registrar", function (req, res) {
     console.log(req.body.documento);
     console.log(req.body.nacimiento);
@@ -157,6 +148,7 @@ app.post("/registrar", function (req, res) {
     });
 });
 
+//CUANDO ME PIDEN ELIMINAR UN CLIENTE, YA SEA POR TARJETA O INGRESANDO EL DOCUMENTO
 app.post("/eliminar", function (req, res) {
    var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE documento = ?) as exist";
    db.query(db_query, req.body.documento, function (err, datos_db, fields) {
@@ -171,15 +163,19 @@ app.post("/eliminar", function (req, res) {
  });
 });
 
+//CUANDO ME PIDEN SUMAR PUNTOS A CLIENTE
 app.post("/sumar", function (req, res) {
-  var puntosNuevos = req.body.monto*multiplier + req.body.puntosactuales;
-  console.log(req.body);
-  var db_query= "UPDATE `clientes` SET puntos = ? WHERE documento = ?"
-  db.query(db_query, [puntosNuevos, req.body.documentoactual]);
+  var db_query= "SELECT puntos FROM `clientes` WHERE `tarjeta` = ?"
+  db.query(db_query, req.body.tarjeta, function(err, puntos, fields) {
+    var puntosNuevos = req.body.monto*multiplier + puntos[0].puntos;
+    var db_query= "UPDATE `clientes` SET puntos = ? WHERE tarjeta = ?"
+    db.query(db_query, [puntosNuevos, req.body.tarjeta]);
+  });
   return res.redirect('/exito');
  });
 
 io.on('connection', function(socket){
+  //CUANDO ME PIDEN LOS DATOS DE UN CLIENTE POR TARJETA
   socket.on('cargarcliente', function(tarjeta){
     var db_query = "SELECT EXISTS(SELECT * FROM clientes WHERE tarjeta = ?) as exist";
     db.query(db_query, tarjeta, function (err, datos_db, fields) {
@@ -195,6 +191,8 @@ io.on('connection', function(socket){
    });
  });
 
+
+ //EMULO UNA TARJETA PORQUE NO TENGO EL HARWARE :3
  setTimeout(function() {
    var card = 987654321
    socket.emit('rfid', card);

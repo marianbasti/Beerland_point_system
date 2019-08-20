@@ -109,14 +109,14 @@
             <th>Precio</th>
             <th></th>
           </tr>
-          <tr class='summary'>
+          <tr>
             <th>Total</th>
             <th> </th>
             <th> </th>
-            <th class='total'></th>
+            <th class='total' id='totalmonto'></th>
           </tr>
         </table>
-        <input style="top: 90%; right: 0px" type="submit" id="enviarpuntos" value="Cargar">
+        <input type="button" id="enviarpuntos" value="Cargar">
       </form>
 
       <div class="items">
@@ -161,20 +161,48 @@
   $('#eliminar').click( function() {
     $("#body").load("./eliminar");
   });
-  $('#cargar').click( function() {
-    $("#body").load("./cargar");
-  });
 
+  //FUNCIONES PARA REGISTRAR CONSUMO
+  //MOSTRAR TABLA
+  $('#cargar').click( function() {
+    $('#cargarpuntos').show('slow');
+    $('#cliente').hide('slow');
+  });
+  //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
   $('#agregaritem').click( function() {
     var itemagregado = $('#items').val().split("|");
-    var markup = "<tr><td>" + itemagregado[0] + "</td><td><input type='number' style='text-align: right; background-color: #303030; color: white' value='1' min='1'></td><td class='sum'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+    var markup = "<tr><td>" + itemagregado[0] + "</td><td><input type='number' style='text-align: right; background-color: #303030; color: white' value='1' min='1'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
     $("#listaitems tr:first").after(markup);
-    $('#listaitems').sumtr();
+    var montototal = Number(itemagregado[1]) + Number($('#totalmonto').html());
+    $('#totalmonto').html(montototal);
   });
+  //QUITAR ITEM
   $('#listaitems').on('click', '.quitardelista', function(){
+    var montototal = Number($('#totalmonto').html()) - Number($(this).closest('.monto').html());
     $(this).closest('tr').remove();
+    $('#totalmonto').html(montototal.toString());
   });
+  //CREO FORM PARA MANDAR CON LOS DATOS
+  $('#enviarpuntos').click(function() {
+    event.preventDefault();
+    var puntosForm = jQuery('<form>', {
+        'action': '/sumar',
+        'method': 'post'
+    }).append(jQuery('<input>', {
+        'name': 'tarjeta',
+        'value': $('#tarjeta').html(),
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'monto',
+        'value': $('#totalmonto').html(),
+        'type': 'hidden'
+    }))
+    $(document.body).append(puntosForm);
+    puntosForm.submit();
+  })
 
+  //ELIMINAR CLIENTE SELECCIONADO POR TARJETA
   $('#eliminarthis').click( function() {
     event.preventDefault();
     var newForm = jQuery('<form>', {
@@ -188,20 +216,15 @@
     $(document.body).append(newForm);
     newForm.submit();
   });
-  $('#cargar').click( function() {
-    var puntos = $('#puntos').val();
-    var doc = $('#documento').val();
-    $('#cargarpuntos').show('slow');
-    $('#puntosactuales').val(puntos);
-    $('#documentoactuales').val(doc);
-    $('#cliente').hide('slow');
-  });
 
   jQuery(function($){
+    //CREO SOCKET
     var socket = io.connect('http://localhost:4000');
+    //CUANDO LEE TARJETA, PIDO LOS DATOS
     socket.on('rfid', function(rfidtag) {
       socket.emit('cargarcliente', rfidtag);
     });
+    //CUANDO ME LLEGAN LOS DATOS, MOSTRAR CONTENEDOR Y CARGARLOS DENTRO
     socket.on('datoscliente', function(cliente){
       yeet();
       $('#cliente').show('slow');
