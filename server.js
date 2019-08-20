@@ -167,6 +167,7 @@ app.post("/eliminar", function (req, res) {
 app.post("/sumar", function (req, res) {
   var db_query= "SELECT puntos FROM `clientes` WHERE `tarjeta` = ?"
   db.query(db_query, req.body.tarjeta, function(err, puntos, fields) {
+    console.log(req.body.comida);
     var puntosNuevos = req.body.monto*multiplier + puntos[0].puntos;
     var db_query= "UPDATE `clientes` SET puntos = ? WHERE tarjeta = ?"
     db.query(db_query, [puntosNuevos, req.body.tarjeta]);
