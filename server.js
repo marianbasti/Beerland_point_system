@@ -167,10 +167,24 @@ app.post("/eliminar", function (req, res) {
 app.post("/sumar", function (req, res) {
   var db_query= "SELECT puntos FROM `clientes` WHERE `tarjeta` = ?"
   db.query(db_query, req.body.tarjeta, function(err, puntos, fields) {
-    console.log(req.body.comida);
+    console.log(req.body);
     var puntosNuevos = req.body.monto*multiplier + puntos[0].puntos;
     var db_query= "UPDATE `clientes` SET puntos = ? WHERE tarjeta = ?"
     db.query(db_query, [puntosNuevos, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET rubia = rubia + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.rubia, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET negra = negra + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.negra, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET roja = roja + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.roja, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET temporada = temporada + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.temporada, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET otroalcohol = otroalcohol + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.otroalcohol, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET salcohol = salcohol + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.salcohol, req.body.tarjeta]);
+    var db_query= "UPDATE `clientes` SET comida = comida + ? WHERE tarjeta = ?"
+    db.query(db_query, [req.body.comida, req.body.tarjeta]);
   });
   return res.redirect('/exito');
  });

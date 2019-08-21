@@ -121,14 +121,15 @@
 
       <div class="items">
         <select name="selectitems" id='items'>
-          <option value="Birra1|70|1">Birra1</option>
-          <option value="Birra2|85|2">Birra2</option>
-          <option value="Birra3|75|3">Birra3</option>
-          <option value="Comida1|250|7">Comida1</option>
-          <option value="Comida2|185|7">Comida2</option>
-          <option value="Comida3|300|7">Comida3</option>
-          <option value="Bebida1|60|6">Bebida1</option>
-          <option value="Bebida2|80|6">Bebida2</option>
+          <option value="Rubia|70|0">Rubia</option>
+          <option value="Negra|85|1">Negra</option>
+          <option value="Roja|75|2">Roja</option>
+          <option value="Temporada|95|3">Temporada</option>
+          <option value="Comida1|250|6">Comida1</option>
+          <option value="Comida2|185|6">Comida2</option>
+          <option value="Comida3|300|6">Comida3</option>
+          <option value="Coca|60|5">Coca</option>
+          <option value="Jugo|80|5">Jugo</option>
         </select>
         <input type="button" id="agregaritem" value="Añadir item">
       </div>
@@ -153,6 +154,7 @@
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
+  var consumos = [0,0,0,0,0,0,0];
   $('#cliente').hide();
   $('#cargarpuntos').hide();
   $('#registrar').click( function() {
@@ -171,6 +173,7 @@
   //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
   $('#agregaritem').click( function() {
     var itemagregado = $('#items').val().split("|");
+    consumos[itemagregado[2]]++;
     console.log(itemagregado[2]);
     var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><input class='sumarmismoitem' type='button' style='background-color: #109010; color: white' value='+'><input class='quitarmismoitem' type='button' style='background-color: #901010; color: white' value='-'><p class='cantitem' style='color:white'>1</p></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
     $("#listaitems tr:last").prev('tr').after(markup);
@@ -179,6 +182,7 @@
   });
   //QUITAR ITEM
   $('#listaitems').on('click', '.quitardelista', function(){
+    consumos[itemagregado[2]] = consumos[itemagregado[2]] - Number($(this).parent().parent().find('p').html());
     var montototal = Number($('#totalmonto').html()) - Number($(this).parent().parent().find('.monto').html());
     $(this).closest('tr').remove();
     $('#totalmonto').html(montototal.toString());
@@ -186,9 +190,10 @@
   //CAMBIAR CANTIDAD DE UN ITEM
   //Agregar
   $('#listaitems').on('click', '.sumarmismoitem', function(){
+    consumos[Number($(this).parent().parent().attr('class'))]++;
+    console.log(consumos);
     var montoitem = Number($(this).parent().parent().find('.monto').html()) + Number($(this).parent().parent().find('.monto').html()) / Number($(this).parent().parent().find('p').html());
     var cantitems = Number($(this).parent().parent().find('p').html()) + 1
-    console.log(montoitem);
     $(this).parent().parent().find('.monto').html(montoitem);
     $(this).parent().parent().find('p').html(cantitems);
     var montototal = Number($('#totalmonto').html()) + montoitem / Number($(this).parent().parent().find('p').html());
@@ -197,9 +202,10 @@
   //Quitar
   $('#listaitems').on('click', '.quitarmismoitem', function(){
     if (Number($(this).parent().parent().find('p').html()) > 1) {
+      consumos[Number($(this).parent().parent().attr('class'))]--;
+      console.log(consumos);
       var montoitem = Number($(this).parent().parent().find('.monto').html()) - Number($(this).parent().parent().find('.monto').html()) / Number($(this).parent().parent().find('p').html());
       var cantitems = Number($(this).parent().parent().find('p').html()) - 1
-      console.log(montoitem);
       $(this).parent().parent().find('.monto').html(montoitem);
       $(this).parent().parent().find('p').html(cantitems);
       var montototal = Number($('#totalmonto').html()) - montoitem / Number($(this).parent().parent().find('p').html());
@@ -224,37 +230,37 @@
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'comida',
-        'value': $('.7').length * Number($('#listaitems').find('.7').find('p').html()),
+        'value': consumos[6],
         'type': 'hidden'
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'rubia',
-        'value': $('.1').length,
+        'value': consumos[0],
         'type': 'hidden'
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'negra',
-        'value': $('.2').length,
+        'value': consumos[1],
         'type': 'hidden'
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'roja',
-        'value': $('.3').length,
+        'value': consumos[2],
         'type': 'hidden'
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'temporada',
-        'value': $('.4').length,
+        'value': consumos[3],
         'type': 'hidden'
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'otroalcohol',
-        'value': $('.5').length,
+        'value': consumos[4],
         'type': 'hidden'
     }));
     puntosForm.append(jQuery('<input>', {
         'name': 'salcohol',
-        'value': $('.6').length,
+        'value': consumos[5],
         'type': 'hidden'
     }))
     $(document.body).append(puntosForm);
