@@ -57,6 +57,7 @@
         background-color: #000000
       }
       .listaitems {
+        opacity: 0%;
         width: 80%;
       }
       .listaitems tr:nth-child(even){background-color: #111111;}
@@ -431,8 +432,13 @@
     //CREO SOCKET
     var socket = io.connect('http://localhost:4000');
     //CUANDO LEE TARJETA, PIDO LOS DATOS
+    //NO SI ESTOY REGISTRANDO CLIENTE NUEVO
     socket.on('rfid', function(rfidtag) {
-      socket.emit('cargarcliente', rfidtag);
+      if ($('#formularioregistro').length) {
+
+      } else {
+        socket.emit('cargarcliente', rfidtag);
+      }
     });
     //CUANDO ME LLEGAN LOS DATOS, MOSTRAR CONTENEDOR Y CARGARLOS DENTRO
     socket.on('datoscliente', function(cliente){
@@ -444,6 +450,7 @@
       $('#puntos').html(cliente[0].puntos);
     })
     socket.on('reload', function(a) {
+
       window.location.reload();
     })
   });

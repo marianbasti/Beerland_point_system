@@ -83,6 +83,10 @@ app.get('/eliminar', function (req, res) {
   res.sendFile(__dirname + '/eliminar.html');
 });
 
+app.get('/func.js', function (req, res) {
+  res.sendFile(__dirname + '/func.js');
+});
+
 app.get('/acercade', function (req, res) {
   res.sendFile(__dirname + '/acercade.html');
 });

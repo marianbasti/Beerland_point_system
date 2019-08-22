@@ -18,16 +18,17 @@
     </style>
   </head>
   <body>
-    <form class="contenedor" action="/registrar" method="post" id='formulario'>
+    <form class="contenedor" action="/registrar" method="post" id='formularioregistro'>
       <input type="number" name='documento' id="documento" placeholder="Documento del cliente" autofocus> <img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="date" name='nacimiento' id="nacimiento"> <img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <select name='sexo' id='sexo'>
+        <option value="" disabled selected>Seleccione</option>
         <option value="m">Masculino</option>
         <option value="f">Femenino</option>
         <option value="o">Otro</option>
       </select> <img id='alert3' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="text" name="localidad" id="localidad" placeholder="Localidad"> <img id='alert4' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
-      <input type="text" name="tarjeta" id="tarjeta" placeholder="Pase tarjeta para completar"> <img id='alert5' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="text" name="tarjeta" id="tarjeta" readonly="readonly" placeholder="Pase tarjeta para completar"> <img id='alert5' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="button" id='cargar' value="Cargar">
     </form>
   </body>
@@ -39,9 +40,33 @@
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
+  $('#documento').on('input', function() {
+    if ($('#documento').val().length < 7){
+      $('#alert1').show('slow');
+    } else {
+      $('#alert1').hide('slow');
+    }
+  })
+  $('#nacimiento').on('change', function() {
+    if ($('#nacimiento').val() == ''){
+      $('#alert2').show('slow');
+    } else {
+      $('#alert2').hide('slow');
+    }
+  })
+  $('#sexo').on('change', function() {
+    $('#alert3').hide('slow');
+  })
+  $('#localidad').on('input', function() {
+    if ($('#localidad').val().length < 2){
+      $('#alert4').show('slow');
+    } else {
+      $('#alert4').hide('slow');
+    }
+  })
   document.getElementById('cargar').addEventListener("click", function() {
     if (validateForm()) {
-      document.getElementById('formulario').submit();
+      document.getElementById('formularioregistro').submit();
     } else {
       alert("Revisar campos")
     }
@@ -59,6 +84,7 @@
     var socket = io.connect('http://localhost:4000');
     socket.on('rfid', function(rfidtag) {
       $('#tarjeta').val(rfidtag);
+      $('#alert5').hide('slow');
     })
   });
 </script>
