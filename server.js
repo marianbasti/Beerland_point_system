@@ -83,10 +83,6 @@ app.get('/eliminar', function (req, res) {
   res.sendFile(__dirname + '/eliminar.html');
 });
 
-app.get('/func.js', function (req, res) {
-  res.sendFile(__dirname + '/func.js');
-});
-
 app.get('/acercade', function (req, res) {
   res.sendFile(__dirname + '/acercade.html');
 });
@@ -235,13 +231,24 @@ io.on('connection', function(socket){
      }
    });
  });
+/*
+ socket.on('usuarioapp', function(docypass) {
+   validardatos
+   encriptarygenerartoken
+   socketenviargilá
+ })
 
-
+socket.on('registrousuarioapp', function(credenciales) {
+  encriptar credenciales.pass
+  var db_query = "INSERT INTO 'usuarios' ?"
+  db.query(db_query, credenciales);
+})
+*/
  //EMULO UNA TARJETA PORQUE NO TENGO EL HARWARE :3
- setTimeout(function() {
+ /*setTimeout(function() {
    var card = 987654321
    socket.emit('rfid', card);
    console.log("emulando tarjeta: " + card)
- }, 1000)
+ }, 1000) */
 
 });

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+  </body>
+</html>
+
+<script src="/jquery.sumtr.js"></script>
+
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+  jQuery(function($){
+    //CREO SOCKET
+    var socket = io.connect('http://localhost:4000');
+    socket.emit('cargarcliente', 987654321);
+    socket.on('datoscliente', function(datos) {
+      console.log(datos);
+    })
+</script>

@@ -28,7 +28,7 @@
         <option value="o">Otro</option>
       </select> <img id='alert3' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="text" name="localidad" id="localidad" placeholder="Localidad"> <img id='alert4' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
-      <input type="text" name="tarjeta" id="tarjeta" readonly="readonly" placeholder="Pase tarjeta para completar"> <img id='alert5' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="text" name="tarjeta" id="tarjeta" placeholder="Pase tarjeta para completar"> <img id='alert5' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="button" id='cargar' value="Cargar">
     </form>
   </body>
@@ -68,7 +68,8 @@
     if (validateForm()) {
       document.getElementById('formularioregistro').submit();
     } else {
-      alert("Revisar campos")
+      alert("Revisar campos");
+
     }
 
   });

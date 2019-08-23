@@ -69,9 +69,16 @@
         left: 70%;
         top: 10%
       }
+      .invisible {
+        position:absolute;
+        bottom: 10px;
+        background: transparent;
+        border: none
+      }
     </style>
   </head>
   <body id='body'>
+    <input id='inputtarjeta' class='invisible' type="text" autofocus>
     <div class="cliente" id="cliente">
       <div class="botonescli">
         <input class="botones3" type="button" id="cargar" value="Cargar puntos">
@@ -186,11 +193,10 @@
 
 <script src="/jquery-3.4.1.min.js"></script>
 
-<script src="/jquery.sumtr.js"></script>
-
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
+
   //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
   var consumos = [0,0,0,0,0,0,0];
   $('#cliente').hide();
@@ -433,6 +439,7 @@
     var socket = io.connect('http://localhost:4000');
     //CUANDO LEE TARJETA, PIDO LOS DATOS
     //NO SI ESTOY REGISTRANDO CLIENTE NUEVO
+    $
     socket.on('rfid', function(rfidtag) {
       if ($('#formularioregistro').length) {
 
@@ -441,9 +448,14 @@
       }
     });
     //CUANDO ME LLEGAN LOS DATOS, MOSTRAR CONTENEDOR Y CARGARLOS DENTRO
+    $('#inputtarjeta').on('keypress',function(e) {
+        if(e.which == 13) {
+            socket.emit('cargarcliente', $('#inputtarjeta').val());
+        }
+    });
     socket.on('datoscliente', function(cliente){
       yeet();
-      $('#cliente').show('slow');
+      $('#cliente').show('fast');
       $('#documento').html(cliente[0].documento);
       $('#tarjeta').html(cliente[0].tarjeta);
       $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
@@ -456,6 +468,6 @@
   });
 
   function yeet() {
-    $("#front").hide('slow');
+    $("#front").hide();
   }
 </script>
