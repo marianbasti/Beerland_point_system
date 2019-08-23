@@ -11,6 +11,17 @@ var db = mysql.createConnection({
     user: 'root',
     database: 'db'
 })
+//IMPRESORA DE TICKET
+const ThermalPrinter = require("node-thermal-printer").printer;
+const PrinterTypes = require("node-thermal-printer").types;
+const electron = typeof process !== 'undefined' && process.versions && !!process.versions.electron;
+
+let printer = new ThermalPrinter({
+  type: PrinterTypes.EPSON,
+  interface: 'printer:POS-58',
+  driver: require(electron ? 'electron-printer' : 'printer')
+});
+
 //MULTIPLICADOR PARA DETERMINAR CUANTOS PUNTOS POR PLATA GASTADA
 const multiplier = 1;
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -185,8 +196,21 @@ app.post("/sumar", function (req, res) {
     db.query(db_query, [req.body.salcohol, req.body.tarjeta]);
     var db_query= "UPDATE `clientes` SET comida = comida + ? WHERE tarjeta = ?"
     db.query(db_query, [req.body.comida, req.body.tarjeta]);
+
+    printer.tableCustom([                                       // Prints table with custom settings (text, align, width, cols, bold)
+      { text:"BEERLAND", align:"CENTER", width:0.5 }
+    ]);
+
+    printer.tableCustom([                                       // Prints table with custom settings (text, align, width, cols, bold)
+      { text:puntosNuevos, align:"CENTER", width:0.5 }
+    ]);
+
+    let execute =  printer.execute();
+
   });
   return res.redirect('/exito');
+
+
  });
 
  //CUANDO ME PIDEN USAR LOS PUNTOS DE UN CLIENTE
