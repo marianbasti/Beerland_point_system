@@ -130,6 +130,10 @@ app.get('/jquery.validate.min.js', function (req, res) {
   res.sendFile(__dirname + '/jquery.validate.min.js');
 });
 
+app.get('/beerland.png', function (req, res) {
+  res.sendFile(__dirname + '/beerland.png');
+});
+
 //CUANDO ME PIDEN REGISTRAR UN CLIENTE
 //ME ASEGURO QUE NI EL DOCUMENTO NI LA TARJETA ESTEN REGISTRADAS
 app.post("/registrar", function (req, res) {
@@ -248,6 +252,7 @@ io.on('connection', function(socket){
       var db_query= "SELECT * FROM clientes WHERE tarjeta = ?"
       db.query(db_query, tarjeta, function (err, cliente, fields) {
         socket.emit('datoscliente', cliente);
+        console.log("Cargado exitosamente cliente: " + cliente[0].documento)
       });
      } else {
        console.log("ERROR: Tarjeta no regristrada");
@@ -268,7 +273,7 @@ socket.on('registrousuarioapp', function(credenciales) {
   db.query(db_query, credenciales);
 })
 */
- //EMULO UNA TARJETA PORQUE NO TENGO EL HARWARE :3
+ //EMULO UNA TARJETA PORQUE NO TENGO EL HARDWARE :3
  /*setTimeout(function() {
    var card = 987654321
    socket.emit('rfid', card);

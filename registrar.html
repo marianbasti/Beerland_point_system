@@ -74,7 +74,7 @@
 
   });
   function validateForm() {
-    if ($('#documento').val().length < 7  || $('#nacimiento').val() == '' || !$('sexo').val() == '' || !$('localidad').val() == '') {
+    if ($('#alert1').is(':visible') || $('#alert2').is(':visible') || $('#alert3').is(':visible') || $('#alert4').is(':visible')) {
       return(false);
     } else {
       return(true);

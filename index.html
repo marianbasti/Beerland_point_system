@@ -5,7 +5,7 @@
     <title>Beerland sistema de puntos</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-      body {color: white; background-color: black;}
+      body {color: white; background-image: url('beerland.png'); background-color: black; background-repeat: no-repeat; background-attachment: fixed; background-position: center}
       .botones3 {
         width: 33%;
         height: 100%;
@@ -33,8 +33,8 @@
       	top: 0px;
       	width: 100%;
       	height: 100%;
-        z-index: 999
-        background-color: #000000
+        z-index: 1;
+        background-color: transparent
       }
       .cliente {
         position: fixed;
@@ -49,16 +49,17 @@
       .contenedor {
         position: fixed;
         opacity: 0%;
-      	left: 30%;
+      	left: 5%;
       	top: 10%;
-      	width: 40%;
+      	width: 50%;
       	height: 50%;
         z-index: 999;
-        background-color: #000000
+        background-color: transparent
       }
       .listaitems {
-        opacity: 0%;
-        width: 80%;
+        text-align: left;
+        opacity: 50%;
+        width: 100%;
       }
       .listaitems tr:nth-child(even){background-color: #111111;}
       .listaitems tr:hover {background-color: #222222;}
@@ -66,14 +67,31 @@
         position: absolute;
         width: 30%;
         height: 50%;
-        left: 70%;
+        right: 0%;
         top: 10%
       }
       .invisible {
+        align-self: center;
         position:absolute;
-        bottom: 10px;
+        height: 85%;
+        width: 99%;
         background: transparent;
-        border: none
+        border: none;
+        z-index: 998;
+        padding: 0px;
+        margin: 0px
+      }
+      .monto {
+        text-align: center;
+      }
+      .sumarmismoitem {text-align:center; position:absolute; right: 50%; width:5%; background-color: #109010; color: white}
+      .quitarmismoitem {text-align:center;position: absolute; right: 45%;width:5%; background-color: #901010; color: white}
+      .total {text-align: center;}
+      select {
+        width:100%
+      }
+      select[multiple] {
+        overflow-y: auto;
       }
     </style>
   </head>
@@ -124,22 +142,27 @@
             <th> </th>
           </tr>
         </table>
-        <input type="button" id="enviarpuntos" value="Cargar">
+        <input style='position:absolute; right:0%' type="button" id="enviarpuntos" value="Cargar">
       </form>
 
-      <div class="items">
-        <select name="selectitems" id='items'>
-          <option value="Rubia|70|0">Rubia</option>
-          <option value="Negra|85|1">Negra</option>
-          <option value="Roja|75|2">Roja</option>
-          <option value="Temporada|95|3">Temporada</option>
-          <option value="Comida1|250|6">Comida1</option>
-          <option value="Comida2|185|6">Comida2</option>
-          <option value="Comida3|300|6">Comida3</option>
-          <option value="Coca|60|5">Coca</option>
-          <option value="Jugo|80|5">Jugo</option>
+      <div class="items" id='contenedoritems1'>
+        <select size='30' name="selectitems" id='items'>
+          <optgroup label="Cervezas">
+            <option value="Rubia|70|0">Rubia</option>
+            <option value="Negra|85|1">Negra</option>
+            <option value="Roja|75|2">Roja</option>
+            <option value="Temporada|95|3">Temporada</option>
+          </optgroup>
+          <optgroup label="Comidas">
+            <option value="Comida1|250|6">Comida1</option>
+            <option value="Comida2|185|6">Comida2</option>
+            <option value="Comida3|300|6">Comida3</option>
+          </optgroup>
+          <optgroup label="Bebidas sin alcohol">
+            <option value="Gaseosa|60|5">Gaseosa</option>
+            <option value="Jugo|80|5">Jugo</option>
+          </optgroup>
         </select>
-        <input type="button" id="agregaritem" value="Añadir item">
       </div>
 
     </div>
@@ -164,17 +187,23 @@
         <p>Puntos disponibles: <a id='puntosdisponibles'></a></p>
       </form>
 
-      <div class="items">
-        <select name="selectitems" id='items2'>
-          <option value="Rubia|70|0">Rubia</option>
-          <option value="Negra|85|1">Negra</option>
-          <option value="Roja|75|2">Roja</option>
-          <option value="Temporada|95|3">Temporada</option>
-          <option value="Comida1|250|6">Comida1</option>
-          <option value="Comida2|185|6">Comida2</option>
-          <option value="Comida3|300|6">Comida3</option>
-          <option value="Coca|60|5">Coca</option>
-          <option value="Jugo|80|5">Jugo</option>
+      <div class="items" id='contenedoritems2'>
+        <select size='30' name="selectitems" id='items2'>
+          <optgroup label="Cervezas">
+            <option value="Rubia|70|0">Rubia</option>
+            <option value="Negra|85|1">Negra</option>
+            <option value="Roja|75|2">Roja</option>
+            <option value="Temporada|95|3">Temporada</option>
+          </optgroup>
+          <optgroup label="Comidas">
+            <option value="Comida1|250|6">Comida1</option>
+            <option value="Comida2|185|6">Comida2</option>
+            <option value="Comida3|300|6">Comida3</option>
+          </optgroup>
+          <optgroup label="Bebidas sin alcohol">
+            <option value="Gaseosa|60|5">Gaseosa</option>
+            <option value="Jugo|80|5">Jugo</option>
+          </optgroup>
         </select>
         <input type="button" id="agregaritem2" value="Añadir item">
       </div>
@@ -183,11 +212,17 @@
 
     <div class='front' id='front'>
       <div class="botonesfront">
+        <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:999'>
         <input class="botones2" type="button" id="registrar" value="Registrar usuario nuevo">
         <input class="botones2" type="button" id="eliminar" value="Eliminar cliente">
       </div>
       <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
     </div>
+
+    <div id='editable' contenteditable="true" style='z-index:997'>
+
+    </div>
+
   </body>
 </html>
 
@@ -196,12 +231,20 @@
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
-
+  $('#editar').on('click', function() {
+    $('#editable').fadeIn();
+    $('#inputtarjeta').fadeOut();
+    $('#front').fadeOut();
+  })
+  $('#totalmonto').on('click', function() {
+    alert(consumos);
+  })
   //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
   var consumos = [0,0,0,0,0,0,0];
   $('#cliente').hide();
   $('#cargarpuntos').hide();
   $('#usarpuntos').hide();
+  $('#editable').hide();
   $('#registrar').click( function() {
     $("#body").load("./registrar");
   });
@@ -212,33 +255,33 @@
   //FUNCIONES PARA REGISTRAR CONSUMO
   //MOSTRAR TABLA
   $('#cargar').click( function() {
-    $('#cargarpuntos').show('slow');
-    $('#cliente').hide('slow');
+    $('#cargarpuntos').fadeIn('slow');
+    $('#cliente').fadeOut('slow');
   });
   $('#usar').click( function() {
-    $('#usarpuntos').show('slow');
-    $('#cliente').hide('slow');
+    $('#usarpuntos').fadeIn('slow');
+    $('#cliente').fadeOut('slow');
     $('#puntosdisponibles').html($('#puntos').html());
   });
   //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
-  $('#agregaritem').click( function() {
-    var itemagregado = $('#items').val().split("|");
+  $('#items').dblclick(function() {
+    var itemagregado = $(this).val().split("|");
     consumos[itemagregado[2]]++;
     console.log(consumos);
-    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' style='background-color: #109010; color: white' value='+'><input class='quitarmismoitem' type='button' style='background-color: #901010; color: white' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
     $("#listaitems tr:last").prev('tr').after(markup);
     var montototal = Number(itemagregado[1]) + Number($('#totalmonto').html());
     $('#totalmonto').html(montototal);
-  });
-  $('#agregaritem2').click( function() {
-    var itemagregado = $('#items2').val().split("|");
+  })
+  $('#items2').dblclick(function() {
+    var itemagregado = $(this).val().split("|");
     consumos[itemagregado[2]]++;
     console.log(consumos);
-    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' style='background-color: #109010; color: white' value='+'><input class='quitarmismoitem' type='button' style='background-color: #901010; color: white' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
     $("#listaitems2 tr:last").prev('tr').after(markup);
     var montototal = Number(itemagregado[1]) + Number($('#totalmonto2').html());
     $('#totalmonto2').html(montototal);
-  });
+  })
   //QUITAR ITEM
   $('#listaitems').on('click', '.quitardelista', function(){
     var montototal = Number($('#totalmonto').html()) - Number($(this).parent().parent().find('.monto').html());
@@ -445,17 +488,19 @@
 
       } else {
         socket.emit('cargarcliente', rfidtag);
+        $('#inputtarjeta').fadeOut();
       }
     });
     //CUANDO ME LLEGAN LOS DATOS, MOSTRAR CONTENEDOR Y CARGARLOS DENTRO
     $('#inputtarjeta').on('keypress',function(e) {
         if(e.which == 13) {
             socket.emit('cargarcliente', $('#inputtarjeta').val());
+            $('#inputtarjeta').fadeOut();
         }
     });
     socket.on('datoscliente', function(cliente){
       yeet();
-      $('#cliente').show('fast');
+      $('#cliente').fadeIn('fast');
       $('#documento').html(cliente[0].documento);
       $('#tarjeta').html(cliente[0].tarjeta);
       $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
