@@ -33,7 +33,7 @@
       	top: 0px;
       	width: 100%;
       	height: 100%;
-        z-index: 1;
+        z-index: 995;
         background-color: transparent
       }
       .cliente {
@@ -88,7 +88,9 @@
       .quitarmismoitem {text-align:center;position: absolute; right: 45%;width:5%; background-color: #901010; color: white}
       .total {text-align: center;}
       select {
-        width:100%
+        width:100%;
+        background-color: #101010;
+        color: white
       }
       select[multiple] {
         overflow-y: auto;
@@ -146,23 +148,7 @@
       </form>
 
       <div class="items" id='contenedoritems1'>
-        <select size='30' name="selectitems" id='items'>
-          <optgroup label="Cervezas">
-            <option value="Rubia|70|0">Rubia</option>
-            <option value="Negra|85|1">Negra</option>
-            <option value="Roja|75|2">Roja</option>
-            <option value="Temporada|95|3">Temporada</option>
-          </optgroup>
-          <optgroup label="Comidas">
-            <option value="Comida1|250|6">Comida1</option>
-            <option value="Comida2|185|6">Comida2</option>
-            <option value="Comida3|300|6">Comida3</option>
-          </optgroup>
-          <optgroup label="Bebidas sin alcohol">
-            <option value="Gaseosa|60|5">Gaseosa</option>
-            <option value="Jugo|80|5">Jugo</option>
-          </optgroup>
-        </select>
+
       </div>
 
     </div>
@@ -188,39 +174,23 @@
       </form>
 
       <div class="items" id='contenedoritems2'>
-        <select size='30' name="selectitems" id='items2'>
-          <optgroup label="Cervezas">
-            <option value="Rubia|70|0">Rubia</option>
-            <option value="Negra|85|1">Negra</option>
-            <option value="Roja|75|2">Roja</option>
-            <option value="Temporada|95|3">Temporada</option>
-          </optgroup>
-          <optgroup label="Comidas">
-            <option value="Comida1|250|6">Comida1</option>
-            <option value="Comida2|185|6">Comida2</option>
-            <option value="Comida3|300|6">Comida3</option>
-          </optgroup>
-          <optgroup label="Bebidas sin alcohol">
-            <option value="Gaseosa|60|5">Gaseosa</option>
-            <option value="Jugo|80|5">Jugo</option>
-          </optgroup>
-        </select>
-        <input type="button" id="agregaritem2" value="Añadir item">
       </div>
 
     </div>
 
     <div class='front' id='front'>
       <div class="botonesfront">
-        <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:999'>
         <input class="botones2" type="button" id="registrar" value="Registrar usuario nuevo">
         <input class="botones2" type="button" id="eliminar" value="Eliminar cliente">
       </div>
       <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
     </div>
 
-    <div id='editable' contenteditable="true" style='z-index:997'>
+    <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:1000'>
+    <div id='editdiv' style='z-index:997'>
+      <div id='edittable' style='width:50%'>
 
+      </div>
     </div>
 
   </body>
@@ -232,12 +202,12 @@
 
 <script type="text/javascript">
   $('#editar').on('click', function() {
-    $('#editable').fadeIn();
+    $('#editar').fadeOut();
+    $('#inputtarjeta').fadeOut();
+    $('#edittable').load('./productos');
+    $('#edittable').fadeIn();
     $('#inputtarjeta').fadeOut();
     $('#front').fadeOut();
-  })
-  $('#totalmonto').on('click', function() {
-    alert(consumos);
   })
   //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
   var consumos = [0,0,0,0,0,0,0];
@@ -255,33 +225,25 @@
   //FUNCIONES PARA REGISTRAR CONSUMO
   //MOSTRAR TABLA
   $('#cargar').click( function() {
+    $('#contenedoritems1').load('./productos');
     $('#cargarpuntos').fadeIn('slow');
     $('#cliente').fadeOut('slow');
   });
   $('#usar').click( function() {
+    $('#contenedoritems2').load('./productos');
     $('#usarpuntos').fadeIn('slow');
     $('#cliente').fadeOut('slow');
     $('#puntosdisponibles').html($('#puntos').html());
+    $("body").on('DOMSubtreeModified', "#listaitems2", function() {
+      if ( Number($('#totalmonto2').html()) > Number($('#puntosdisponibles').html())) {
+        alert("Puntos excedidos!");
+        $('#enviarpuntosgastados').prop('disabled', true);
+      } else {
+        $('#enviarpuntosgastados').prop('disabled', false);
+      }
+    });
   });
   //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
-  $('#items').dblclick(function() {
-    var itemagregado = $(this).val().split("|");
-    consumos[itemagregado[2]]++;
-    console.log(consumos);
-    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
-    $("#listaitems tr:last").prev('tr').after(markup);
-    var montototal = Number(itemagregado[1]) + Number($('#totalmonto').html());
-    $('#totalmonto').html(montototal);
-  })
-  $('#items2').dblclick(function() {
-    var itemagregado = $(this).val().split("|");
-    consumos[itemagregado[2]]++;
-    console.log(consumos);
-    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
-    $("#listaitems2 tr:last").prev('tr').after(markup);
-    var montototal = Number(itemagregado[1]) + Number($('#totalmonto2').html());
-    $('#totalmonto2').html(montototal);
-  })
   //QUITAR ITEM
   $('#listaitems').on('click', '.quitardelista', function(){
     var montototal = Number($('#totalmonto').html()) - Number($(this).parent().parent().find('.monto').html());
@@ -344,14 +306,7 @@
   });
 
 
-  $("body").on('DOMSubtreeModified', "#listaitems2", function() {
-    if ( Number($('#totalmonto2').html()) > Number($('#puntosdisponibles').html())) {
-      alert("Puntos excedidos!");
-      $('#enviarpuntosgastados').prop('disabled', true);
-    } else {
-      $('#enviarpuntosgastados').prop('disabled', false);
-    }
-  });
+
   //CREO FORM PARA MANDAR CON LOS DATOS
   //SUMAR
   $('#enviarpuntos').click(function() {
@@ -501,6 +456,7 @@
     socket.on('datoscliente', function(cliente){
       yeet();
       $('#cliente').fadeIn('fast');
+      $('#editar').hide();
       $('#documento').html(cliente[0].documento);
       $('#tarjeta').html(cliente[0].tarjeta);
       $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));

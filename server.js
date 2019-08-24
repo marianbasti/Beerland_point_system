@@ -134,6 +134,10 @@ app.get('/beerland.png', function (req, res) {
   res.sendFile(__dirname + '/beerland.png');
 });
 
+app.get('/productos', function (req, res) {
+  res.sendFile(__dirname + '/productos.html');
+});
+
 //CUANDO ME PIDEN REGISTRAR UN CLIENTE
 //ME ASEGURO QUE NI EL DOCUMENTO NI LA TARJETA ESTEN REGISTRADAS
 app.post("/registrar", function (req, res) {

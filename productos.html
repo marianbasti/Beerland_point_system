@@ -1,0 +1,42 @@
+
+<select class='listaproductos' size='30' name="selectitems" id='items'>
+  <optgroup label="Cervezas">
+    <option value="Rubia|70|0">Rubia</option>
+    <option value="Negra|85|1">Negra</option>
+    <option value="Roja|75|2">Roja</option>
+    <option value="Temporada|95|3">Temporada</option>
+  </optgroup>
+  <optgroup label="Comidas">
+    <option value="Comida1|250|6">Comida1</option>
+    <option value="Comida2|185|6">Comida2</option>
+    <option value="Comida3|300|6">Comida3</option>
+  </optgroup>
+  <optgroup label="Bebidas sin alcohol">
+    <option value="Gaseosa|60|5">Gaseosa</option>
+    <option value="Jugo|80|5">Jugo</option>
+  </optgroup>
+</select>
+
+<script src="/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+//AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
+  $('#items').dblclick(function() {
+    var itemagregado = $(this).val().split("|");
+    consumos[itemagregado[2]]++;
+    console.log(consumos);
+    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+    $("#listaitems tr:last").prev('tr').after(markup);
+    var montototal = Number(itemagregado[1]) + Number($('#totalmonto').html());
+    $('#totalmonto').html(montototal);
+  })
+  $('#items').dblclick(function() {
+    var itemagregado = $(this).val().split("|");
+    consumos[itemagregado[2]]++;
+    console.log(consumos);
+    var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+    $("#listaitems2 tr:last").prev('tr').after(markup);
+    var montototal = Number(itemagregado[1]) + Number($('#totalmonto2').html());
+    $('#totalmonto2').html(montototal);
+  })
+</script>
