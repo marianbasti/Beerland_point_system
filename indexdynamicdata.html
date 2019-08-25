@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Beerland sistema de puntos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+      body {color: white; background-image: url('beerland.png'); background-color: black; background-repeat: no-repeat; background-attachment: fixed; background-position: center}
+      .botones3 {
+        width: 33%;
+        height: 100%;
+      }
+      .botones2 {
+        width: 49%;
+        height: 100%;
+      }
+      .botonesfront {
+        position: absolute;
+        width: 100%;
+        height: 10%;
+        bottom: 2%
+      }
+      .botonescli {
+        position: absolute;
+        width: 100%;
+        height: 20%;
+        bottom: 1%
+      }
+      .front {
+        position: fixed;
+        opacity: 100%;
+      	left: 0px;
+      	top: 0px;
+      	width: 100%;
+      	height: 100%;
+        z-index: 995;
+        background-color: transparent
+      }
+      .cliente {
+        position: fixed;
+        opacity: 0%;
+      	left: 0px;
+      	top: 0px;
+      	width: 100%;
+      	height: 100%;
+        z-index: 998
+        background-color: #0D0000
+      }
+      .contenedor {
+        position: fixed;
+        opacity: 0%;
+      	left: 5%;
+      	top: 10%;
+      	width: 50%;
+      	height: 50%;
+        z-index: 999;
+        background-color: transparent
+      }
+      .listaitems {
+        text-align: left;
+        opacity: 50%;
+        width: 100%;
+      }
+      .listaitems tr:nth-child(even){background-color: #111111;}
+      .listaitems tr:hover {background-color: #222222;}
+      .items {
+        position: absolute;
+        width: 30%;
+        height: 50%;
+        right: 0%;
+        top: 10%
+      }
+      .invisible {
+        align-self: center;
+        position:absolute;
+        height: 85%;
+        width: 99%;
+        background: transparent;
+        border: none;
+        z-index: 998;
+        padding: 0px;
+        margin: 0px
+      }
+      .monto {
+        text-align: center;
+      }
+      .sumarmismoitem {text-align:center; position:absolute; right: 50%; width:5%; background-color: #109010; color: white}
+      .quitarmismoitem {text-align:center;position: absolute; right: 45%;width:5%; background-color: #901010; color: white}
+      .total {text-align: center;}
+      select {
+        width:100%;
+        background-color: #101010;
+        color: white
+      }
+      select[multiple] {
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body id='body'>
+    <input id='inputtarjeta' class='invisible' type="text" autofocus>
+    <div class="cliente" id="cliente">
+      <div class="botonescli">
+        <input class="botones3" type="button" id="cargar" value="Cargar puntos">
+        <input class="botones3" type="button" id="usar" value="Usar puntos">
+        <input class="botones3" type="button" id="eliminarthis" value="Eliminar este cliente">
+      </div>
+      <div class="contenedor" id="contenedor">
+        <table style="width:100%; margin: 0px; opacity: 0%">
+          <tr>
+            <th>Documento: </th>
+            <td id="documento"></td>
+          </tr>
+          <tr>
+            <th>ID tarjeta: </th>
+            <td id="tarjeta"></td>
+          </tr>
+          <tr>
+            <th>Nacimiento: </th>
+            <td id="nacimiento"></td>
+          </tr>
+          <tr>
+            <th>Puntos disponibles: </th>
+            <td id="puntos"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="cliente" id='cargarpuntos'>
+      <form class="contenedor" method="post">
+        <table class='listaitems' id='listaitems'>
+          <tr>
+            <th>Item</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Total</th>
+            <th> </th>
+            <th class='total' id='totalmonto'></th>
+            <th> </th>
+          </tr>
+        </table>
+        <input style='position:absolute; right:0%' type="button" id="enviarpuntos" value="Cargar">
+      </form>
+
+      <div class="items" id='contenedoritems1'>
+
+      </div>
+
+    </div>
+
+    <div class="cliente" id='usarpuntos'>
+      <form class="contenedor" method="post">
+        <table class='listaitems' id='listaitems2'>
+          <tr>
+            <th>Item</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th></th>
+          </tr>
+          <tr>
+            <th>Total</th>
+            <th> </th>
+            <th class='total' id='totalmonto2'></th>
+            <th> </th>
+          </tr>
+        </table>
+        <input type="button" id="enviarpuntosgastados" value="Usar">
+        <p>Puntos disponibles: <a id='puntosdisponibles'></a></p>
+      </form>
+
+      <div class="items" id='contenedoritems2'>
+      </div>
+
+    </div>
+
+    <div class='front' id='front'>
+      <div class="botonesfront">
+        <input class="botones2" type="button" id="registrar" value="Registrar usuario nuevo">
+        <input class="botones2" type="button" id="eliminar" value="Eliminar cliente">
+      </div>
+      <div style="padding-top: 15%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
+    </div>
+
+    <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:1000'>
+    <div id='editdiv' style='z-index:997'>
+      <div id='edittable' style='width:50%'>
+
+      </div>
+    </div>
+
+  </body>
+</html>
+
+<script src="/jquery-3.4.1.min.js"></script>
+
+<script src="http://localhost:4000/socket.io/socket.io.js"></script>
+
+<script type="text/javascript">
+  $('#editar').on('click', function() {
+    $('#editar').fadeOut();
+    $('#inputtarjeta').fadeOut();
+    $('#edittable').load('./productos');
+    $('#edittable').fadeIn();
+    $('#inputtarjeta').fadeOut();
+    $('#front').fadeOut();
+  })
+  //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
+  var consumos = [0,0,0,0,0,0,0];
+  $('#cliente').hide();
+  $('#cargarpuntos').hide();
+  $('#usarpuntos').hide();
+  $('#editable').hide();
+  $('#registrar').click( function() {
+    $("#body").load("./registrar");
+  });
+  $('#eliminar').click( function() {
+    $("#body").load("./eliminar");
+  });
+
+  //FUNCIONES PARA REGISTRAR CONSUMO
+  //MOSTRAR TABLA
+  $('#cargar').click( function() {
+    //CARGO DINAMICAMENTE LOS PRODUCTOS
+    $.get("./productos.txt", function(response) {
+     var sel = $('<select>').attr('id', "items").attr('size', "15").appendTo('#contenedoritems1');
+     var prodfile = response;
+     var categoriasitem = prodfile.split('/');
+     var productos = [];
+     var subcategorias = [];
+     for (var i = 0; i<categoriasitem.length; i++) {
+       subcategorias.push(categoriasitem[i].substring(0, categoriasitem[i].indexOf('.')));
+       sel.append($("<optgroup>").attr('label',subcategorias[i]));
+       var productostemp = categoriasitem[i].substring(categoriasitem[i].indexOf('.')+1).split(',');
+       for(var j = 0; j<productostemp.length; j++) {
+         sel.append($("<option>").attr('value',productostemp[j]).text(productostemp[j].split('|')[0]));
+       }
+       console.log(productostemp);
+     }
+     $('#items').dblclick(function() {
+       var itemagregado = $(this).val().split("|");
+       consumos[itemagregado[2]]++;
+       console.log(consumos);
+       var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+       $("#listaitems tr:last").prev('tr').after(markup);
+       var montototal = Number(itemagregado[1]) + Number($('#totalmonto').html());
+       $('#totalmonto').html(montototal);
+     })
+    });
+    $('#cargarpuntos').fadeIn('slow');
+    $('#cliente').fadeOut('slow');
+  });
+  $('#usar').click( function() {
+    //CARGO DINAMICAMENTE LOS PRODUCTOS
+    $.get("./productos.txt", function(response) {
+     var sel = $('<select>').attr('id', "items").attr('size', "15").appendTo('#contenedoritems2');
+     var prodfile = response;
+     var categoriasitem = prodfile.split('/');
+     var productos = [];
+     var subcategorias = [];
+     for (var i = 0; i<categoriasitem.length; i++) {
+       subcategorias.push(categoriasitem[i].substring(0, categoriasitem[i].indexOf('.')));
+       sel.append($("<optgroup>").attr('label',subcategorias[i]));
+       var productostemp = categoriasitem[i].substring(categoriasitem[i].indexOf('.')+1).split(',');
+       for(var j = 0; j<productostemp.length; j++) {
+         sel.append($("<option>").attr('value',productostemp[j]).text(productostemp[j].split('|')[0]));
+       }
+       console.log(productostemp);
+     }
+     $('#items').dblclick(function() {
+       var itemagregado = $(this).val().split("|");
+       consumos[itemagregado[2]]++;
+       console.log(consumos);
+       var markup = "<tr class='" + itemagregado[2] + "'><td>" + itemagregado[0] + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemagregado[1] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+       $("#listaitems2 tr:last").prev('tr').after(markup);
+       var montototal = Number(itemagregado[1]) + Number($('#totalmonto2').html());
+       $('#totalmonto2').html(montototal);
+     })
+    });
+    $('#usarpuntos').fadeIn('slow');
+    $('#cliente').fadeOut('slow');
+    $('#puntosdisponibles').html($('#puntos').html());
+    $("body").on('DOMSubtreeModified', "#listaitems2", function() {
+      if ( Number($('#totalmonto2').html()) > Number($('#puntosdisponibles').html())) {
+        alert("Puntos excedidos!");
+        $('#enviarpuntosgastados').prop('disabled', true);
+      } else {
+        $('#enviarpuntosgastados').prop('disabled', false);
+      }
+    });
+  });
+  //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
+
+  //QUITAR ITEM
+  $('#listaitems').on('click', '.quitardelista', function(){
+    var montototal = Number($('#totalmonto').html()) - Number($(this).parent().parent().find('.monto').html());
+    consumos[Number($(this).parent().parent().attr('class'))] = consumos[Number($(this).parent().parent().attr('class'))]-Number($(this).parent().parent().find('span').html());
+    $(this).closest('tr').remove();
+    $('#totalmonto').html(montototal.toString());
+  });
+  $('#listaitems2').on('click', '.quitardelista', function(){
+    var montototal = Number($('#totalmonto2').html()) - Number($(this).parent().parent().find('.monto').html());
+    consumos[Number($(this).parent().parent().attr('class'))] = consumos[Number($(this).parent().parent().attr('class'))]-Number($(this).parent().parent().find('span').html());
+    $(this).closest('tr').remove();
+    $('#totalmonto2').html(montototal.toString());
+  });
+  //CAMBIAR CANTIDAD DE UN ITEM
+  //Agregar
+  $('#listaitems').on('click', '.sumarmismoitem', function(){
+    consumos[Number($(this).parent().parent().attr('class'))]++;
+    console.log(consumos);
+    var montoitem = Number($(this).parent().parent().find('.monto').html()) + Number($(this).parent().parent().find('.monto').html()) / Number($(this).parent().parent().find('span').html());
+    var cantitems = Number($(this).parent().parent().find('span').html()) + 1
+    $(this).parent().parent().find('.monto').html(montoitem);
+    $(this).parent().parent().find('span').html(cantitems);
+    var montototal = Number($('#totalmonto').html()) + montoitem / Number($(this).parent().parent().find('span').html());
+    $('#totalmonto').html(montototal.toString());
+  });
+  $('#listaitems2').on('click', '.sumarmismoitem', function(){
+    consumos[Number($(this).parent().parent().attr('class'))]++;
+    console.log(consumos);
+    var montoitem = Number($(this).parent().parent().find('.monto').html()) + Number($(this).parent().parent().find('.monto').html()) / Number($(this).parent().parent().find('span').html());
+    var cantitems = Number($(this).parent().parent().find('span').html()) + 1
+    $(this).parent().parent().find('.monto').html(montoitem);
+    $(this).parent().parent().find('span').html(cantitems);
+    var montototal = Number($('#totalmonto2').html()) + montoitem / Number($(this).parent().parent().find('span').html());
+    $('#totalmonto2').html(montototal.toString());
+  });
+  //Quitar
+  $('#listaitems').on('click', '.quitarmismoitem', function(){
+    if (Number($(this).parent().parent().find('span').html()) > 1) {
+      consumos[Number($(this).parent().parent().attr('class'))]--;
+      console.log(consumos);
+      var montoitem = Number($(this).parent().parent().find('.monto').html()) - Number($(this).parent().parent().find('.monto').html()) / Number($(this).parent().parent().find('span').html());
+      var cantitems = Number($(this).parent().parent().find('span').html()) - 1
+      $(this).parent().parent().find('.monto').html(montoitem);
+      $(this).parent().parent().find('span').html(cantitems);
+      var montototal = Number($('#totalmonto').html()) - montoitem / Number($(this).parent().parent().find('span').html());
+      $('#totalmonto').html(montototal.toString());
+    }
+  });
+  $('#listaitems2').on('click', '.quitarmismoitem', function(){
+    if (Number($(this).parent().parent().find('span').html()) > 1) {
+      consumos[Number($(this).parent().parent().attr('class'))]--;
+      console.log(consumos);
+      var montoitem = Number($(this).parent().parent().find('.monto').html()) - Number($(this).parent().parent().find('.monto').html()) / Number($(this).parent().parent().find('span').html());
+      var cantitems = Number($(this).parent().parent().find('span').html()) - 1
+      $(this).parent().parent().find('.monto').html(montoitem);
+      $(this).parent().parent().find('span').html(cantitems);
+      var montototal = Number($('#totalmonto2').html()) - montoitem / Number($(this).parent().parent().find('span').html());
+      $('#totalmonto2').html(montototal.toString());
+    }
+  });
+
+
+
+  //CREO FORM PARA MANDAR CON LOS DATOS
+  //SUMAR
+  $('#enviarpuntos').click(function() {
+    event.preventDefault();
+    var puntosForm = jQuery('<form>', {
+        'action': '/sumar',
+        'method': 'post'
+    }).append(jQuery('<input>', {
+        'name': 'tarjeta',
+        'value': $('#tarjeta').html(),
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'monto',
+        'value': $('#totalmonto').html(),
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'comida',
+        'value': consumos[6],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'rubia',
+        'value': consumos[0],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'negra',
+        'value': consumos[1],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'roja',
+        'value': consumos[2],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'temporada',
+        'value': consumos[3],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'otroalcohol',
+        'value': consumos[4],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'salcohol',
+        'value': consumos[5],
+        'type': 'hidden'
+    }))
+    $(document.body).append(puntosForm);
+    puntosForm.submit();
+  });
+  //USAR
+  $('#enviarpuntosgastados').click(function() {
+    event.preventDefault();
+    var puntosForm = jQuery('<form>', {
+        'action': '/gastar',
+        'method': 'post'
+    }).append(jQuery('<input>', {
+        'name': 'tarjeta',
+        'value': $('#tarjeta').html(),
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'monto',
+        'value': $('#totalmonto2').html(),
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'comida',
+        'value': consumos[6],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'rubia',
+        'value': consumos[0],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'negra',
+        'value': consumos[1],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'roja',
+        'value': consumos[2],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'temporada',
+        'value': consumos[3],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'otroalcohol',
+        'value': consumos[4],
+        'type': 'hidden'
+    }));
+    puntosForm.append(jQuery('<input>', {
+        'name': 'salcohol',
+        'value': consumos[5],
+        'type': 'hidden'
+    }))
+    $(document.body).append(puntosForm);
+    puntosForm.submit();
+  })
+
+  //ELIMINAR CLIENTE SELECCIONADO POR TARJETA
+  $('#eliminarthis').click( function() {
+    event.preventDefault();
+    var newForm = jQuery('<form>', {
+        'action': '/eliminar',
+        'method': 'post'
+    }).append(jQuery('<input>', {
+        'name': 'documento',
+        'value': $('#documento').html(),
+        'type': 'hidden'
+    }));
+    $(document.body).append(newForm);
+    newForm.submit();
+  });
+
+  jQuery(function($){
+    //CREO SOCKET
+    var socket = io.connect('http://localhost:4000');
+    //CUANDO LEE TARJETA, PIDO LOS DATOS
+    //NO SI ESTOY REGISTRANDO CLIENTE NUEVO
+    $
+    socket.on('rfid', function(rfidtag) {
+      if ($('#formularioregistro').length) {
+
+      } else {
+        socket.emit('cargarcliente', rfidtag);
+        $('#inputtarjeta').fadeOut();
+      }
+    });
+    //CUANDO ME LLEGAN LOS DATOS, MOSTRAR CONTENEDOR Y CARGARLOS DENTRO
+    $('#inputtarjeta').on('keypress',function(e) {
+        if(e.which == 13) {
+            socket.emit('cargarcliente', $('#inputtarjeta').val());
+            $('#inputtarjeta').fadeOut();
+        }
+    });
+    socket.on('datoscliente', function(cliente){
+      yeet();
+      $('#cliente').fadeIn('fast');
+      $('#editar').hide();
+      $('#documento').html(cliente[0].documento);
+      $('#tarjeta').html(cliente[0].tarjeta);
+      $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
+      $('#puntos').html(cliente[0].puntos);
+    })
+    socket.on('reload', function(a) {
+
+      window.location.reload();
+    })
+  });
+
+  function yeet() {
+    $("#front").hide();
+  }
+</script>

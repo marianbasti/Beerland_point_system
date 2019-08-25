@@ -78,8 +78,12 @@ nfc.on('error', err => {
 
 //Express
 //Sirvo las pagias y librerias pa que funque
-app.get('/', function (req, res) {
+app.get('/old', function (req, res) {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/indexdynamicdata.html');
 });
 
 app.get('/exito', function (req, res) {
@@ -136,6 +140,10 @@ app.get('/beerland.png', function (req, res) {
 
 app.get('/productos', function (req, res) {
   res.sendFile(__dirname + '/productos.html');
+});
+
+app.get('/productos.txt', function (req, res) {
+  res.sendFile(__dirname + '/productos.txt');
 });
 
 //CUANDO ME PIDEN REGISTRAR UN CLIENTE

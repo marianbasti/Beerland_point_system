@@ -1,0 +1,1 @@
+CERVEZAS.Rubia|70|0,Negra|85|1,Roja|75|2,Temporada|95|3/Comidas.Comida1|250|6,Comida2|185|6,Comida3|300|6/Bebidas sin alcohol.Gaseosa|60|5,Jugo|80|5/PAPAS.Papas Beerland|80|6
