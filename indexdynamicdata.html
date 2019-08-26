@@ -188,9 +188,7 @@
 
     <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:1000'>
     <div id='editdiv' style='z-index:997'>
-      <div id='edittable' style='width:50%'>
-
-      </div>
+      <input type="button" id="guardarcambios" value="Guardar cambios">
     </div>
 
   </body>
@@ -201,13 +199,29 @@
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
+
   $('#editar').on('click', function() {
     $('#editar').fadeOut();
     $('#inputtarjeta').fadeOut();
-    $('#edittable').load('./productos');
-    $('#edittable').fadeIn();
-    $('#inputtarjeta').fadeOut();
     $('#front').fadeOut();
+    $.get("./productos.txt", function(response) {
+     var sel = $('<table>').attr('id', "edittable").appendTo('#editdiv');
+     var prodfile = response;
+     var categoriasitem = prodfile.split('/');
+     var productos = [];
+     var subcategorias = [];
+     for (var i = 0; i<categoriasitem.length; i++) {
+       subcategorias.push(categoriasitem[i].substring(0, categoriasitem[i].indexOf('.')));
+       sel.append($("<tr>"));
+       var productostemp = categoriasitem[i].substring(categoriasitem[i].indexOf('.')+1).split(',');
+       for(var j = 0; j<productostemp.length; j++) {
+         sel.append($("<tr>").attr('value',productostemp[j]).text(productostemp[j].split('|')[0]));
+         sel.append($("<td>").append($("<input>").attr('id',productostemp[j].split('|')[0]).attr('value', productostemp[j].split('|')[1]).attr('type', 'number')));
+       }
+       console.log(productostemp);
+     }
+    });
+    $('#edittable').fadeIn();
   })
   //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
   var consumos = [0,0,0,0,0,0,0];
