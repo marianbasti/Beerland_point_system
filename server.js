@@ -213,16 +213,44 @@ app.post("/sumar", function (req, res) {
     var db_query= "UPDATE `clientes` SET comida = comida + ? WHERE tarjeta = ?"
     db.query(db_query, [req.body.comida, req.body.tarjeta]);
 
-    printer.tableCustom([                                       // Prints table with custom settings (text, align, width, cols, bold)
-      { text:"BEERLAND", align:"CENTER", width:0.5 }
-    ]);
+    date = new Date();
+    var dd = date.getDate();
+    var mm = date.getMonth() + 1; //January is 0!
+    var yyyy = date.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    var today = dd + '/' + mm + '/' + yyyy;
 
-    printer.tableCustom([                                       // Prints table with custom settings (text, align, width, cols, bold)
-      { text:puntosNuevos, align:"CENTER", width:0.5 }
+    printer.leftRight(today,date.getHours() + ":" + date.getMinutes());
+    printer.newLine();
+
+    printer.tableCustom([
+      { text:"BEERLAND", align:"CENTER", bold:true }
     ]);
+    printer.newLine();
+    printer.tableCustom([
+      { text:"Con tu compra sumaste", align:"CENTER" }
+    ]);
+    printer.tableCustom([
+      { text:req.body.monto*multiplier + " puntos.", align:"CENTER"}
+    ]);
+    printer.newLine();
+    printer.tableCustom([
+      { text:"Ya tenés " + puntosNuevos + " puntos acumulados", align:"CENTER" }
+    ]);
+    printer.drawLine();
+    printer.tableCustom([
+      { text:"¡Muchas gracias por tu visita!", align:"CENTER" }
+    ]);
+    printer.newLine();
+    printer.newLine();
 
     let execute =  printer.execute();
-
+    printer.clear(); 
   });
   return res.redirect('/exito');
 
