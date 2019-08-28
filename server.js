@@ -192,6 +192,25 @@ app.post("/eliminar", function (req, res) {
 
 //CUANDO ME PIDEN SUMAR PUNTOS A CLIENTE
 app.post("/sumar", function (req, res) {
+
+  date = new Date();
+  var dd = date.getDate();
+  var mm = date.getMonth() + 1; //January is 0!
+  var yyyy = date.getFullYear();
+  if (dd < 10) {
+    dd = '0' + dd;
+  }
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+  var today = dd + '/' + mm + '/' + yyyy;
+
+  printer.leftRight(today,date.getHours() + ":" + ('0'+date.getMinutes()).slice(-2));
+
+  printer.printImage('./beerlandticket.png');
+  printer.execute();
+  printer.clear();
+
   var db_query= "SELECT puntos FROM `clientes` WHERE `tarjeta` = ?"
   db.query(db_query, req.body.tarjeta, function(err, puntos, fields) {
     console.log(req.body);
@@ -213,24 +232,11 @@ app.post("/sumar", function (req, res) {
     var db_query= "UPDATE `clientes` SET comida = comida + ? WHERE tarjeta = ?"
     db.query(db_query, [req.body.comida, req.body.tarjeta]);
 
-    date = new Date();
-    var dd = date.getDate();
-    var mm = date.getMonth() + 1; //January is 0!
-    var yyyy = date.getFullYear();
-    if (dd < 10) {
-      dd = '0' + dd;
-    }
-    if (mm < 10) {
-      mm = '0' + mm;
-    }
-    var today = dd + '/' + mm + '/' + yyyy;
 
-    printer.leftRight(today,date.getHours() + ":" + date.getMinutes());
-    printer.newLine();
 
-    printer.tableCustom([
-      { text:"BEERLAND", align:"CENTER", bold:true }
-    ]);
+    /*printer.tableCustom([
+      { text:"BEERLAND", align:"CENTER", bold: true }
+    ]);*/
     printer.newLine();
     printer.tableCustom([
       { text:"Con tu compra sumaste", align:"CENTER" }
@@ -248,9 +254,10 @@ app.post("/sumar", function (req, res) {
     ]);
     printer.newLine();
     printer.newLine();
+    printer.newLine();
 
-    let execute =  printer.execute();
-    printer.clear(); 
+    printer.execute();
+    printer.clear();
   });
   return res.redirect('/exito');
 
@@ -259,6 +266,25 @@ app.post("/sumar", function (req, res) {
 
  //CUANDO ME PIDEN USAR LOS PUNTOS DE UN CLIENTE
  app.post("/gastar", function (req, res) {
+
+   date = new Date();
+   var dd = date.getDate();
+   var mm = date.getMonth() + 1; //January is 0!
+   var yyyy = date.getFullYear();
+   if (dd < 10) {
+     dd = '0' + dd;
+   }
+   if (mm < 10) {
+     mm = '0' + mm;
+   }
+   var today = dd + '/' + mm + '/' + yyyy;
+
+   printer.leftRight(today,date.getHours() + ":" + ('0'+date.getMinutes()).slice(-2));
+
+   printer.printImage('./beerlandticket.png');
+   printer.execute();
+   printer.clear();
+
    var db_query= "SELECT puntos FROM `clientes` WHERE `tarjeta` = ?"
    db.query(db_query, req.body.tarjeta, function(err, puntos, fields) {
      console.log(req.body);
@@ -279,6 +305,32 @@ app.post("/sumar", function (req, res) {
      db.query(db_query, [req.body.salcohol, req.body.tarjeta]);
      var db_query= "UPDATE `clientes` SET comida = comida + ? WHERE tarjeta = ?"
      db.query(db_query, [req.body.comida, req.body.tarjeta]);
+
+
+     /*printer.tableCustom([
+       { text:"BEERLAND", align:"CENTER", bold: true }
+     ]);*/
+     printer.newLine();
+     printer.tableCustom([
+       { text:"Usaste", align:"CENTER" }
+     ]);
+     printer.tableCustom([
+       { text:req.body.monto*multiplier + " puntos.", align:"CENTER"}
+     ]);
+     printer.newLine();
+     printer.tableCustom([
+       { text:"Te quedan " + puntosNuevos + " puntos.", align:"CENTER" }
+     ]);
+     printer.drawLine();
+     printer.tableCustom([
+       { text:"¡Muchas gracias por tu visita!", align:"CENTER" }
+     ]);
+     printer.newLine();
+     printer.newLine();
+     printer.newLine();
+
+     printer.execute();
+     printer.clear();
    });
    return res.redirect('/exito');
   });

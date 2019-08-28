@@ -169,7 +169,7 @@
             <th> </th>
           </tr>
         </table>
-        <input type="button" id="enviarpuntosgastados" value="Usar">
+        <input style='position:absolute; right:0%' type="button" id="enviarpuntosgastados" value="Usar">
         <p>Puntos disponibles: <a id='puntosdisponibles'></a></p>
       </form>
 
@@ -222,6 +222,7 @@
      }
     });
     $('#edittable').fadeIn();
+    $('#guardarcambios').fadeIn();
   })
   //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
   var consumos = [0,0,0,0,0,0,0];
@@ -229,6 +230,7 @@
   $('#cargarpuntos').hide();
   $('#usarpuntos').hide();
   $('#editable').hide();
+  $('#guardarcambios').hide();
   $('#registrar').click( function() {
     $("#body").load("./registrar");
   });
