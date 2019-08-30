@@ -757,7 +757,6 @@
       "resolved": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.2.tgz",
       "version": "0.6.2"
     },
-    "nfc-pcsc": "^0.7.4",
     "node-abi": {
       "integrity": "sha512-OT0WepUvYHXdki6DU8LWhEkuo3M44i2paWBYtH9qXtPb9YiKlYEKa5WUII20XEcOv7UJPzfB0kZfPZdW46zdkw==",
       "requires": {

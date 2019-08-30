@@ -231,12 +231,6 @@
   $('#usarpuntos').hide();
   $('#editable').hide();
   $('#guardarcambios').hide();
-  $('#registrar').click( function() {
-    $("#body").load("./registrar");
-  });
-  $('#eliminar').click( function() {
-    $("#body").load("./eliminar");
-  });
 
   //FUNCIONES PARA REGISTRAR CONSUMO
   //MOSTRAR TABLA
@@ -499,6 +493,14 @@
     newForm.submit();
   });
 
+  //REGISTRAR CLIENTE NUEVO
+  $('#registrar').click( function() {
+    $("#body").load("./registrar");
+  });
+  $('#eliminar').click( function() {
+    $("#body").load("./eliminar");
+  });
+
   jQuery(function($){
     //CREO SOCKET
     var socket = io.connect('http://localhost:4000');
@@ -528,6 +530,11 @@
       $('#tarjeta').html(cliente[0].tarjeta);
       $('#nacimiento').html(cliente[0].nacimiento.slice(0,10));
       $('#puntos').html(cliente[0].puntos);
+    })
+    socket.on('registrartarjetanueva', function(tarjeta) {
+      $("#body").load("./registrar", function() {
+        $('#tarjeta').val(tarjeta);
+      });
     })
     socket.on('reload', function(a) {
 
