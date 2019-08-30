@@ -98,7 +98,7 @@
     </style>
   </head>
   <body id='body'>
-    <input id='inputtarjeta' class='invisible' type="text" autofocus>
+    <input id='inputtarjeta' class='invisible' type="text" autocomplete="off" autofocus>
     <div class="cliente" id="cliente">
       <div class="botonescli">
         <input class="botones3" type="button" id="cargar" value="Cargar puntos">
@@ -534,6 +534,7 @@
     socket.on('registrartarjetanueva', function(tarjeta) {
       $("#body").load("./registrar", function() {
         $('#tarjeta').val(tarjeta);
+        $('#tarjeta').attr('readonly', "readonly")
       });
     })
     socket.on('reload', function(a) {
