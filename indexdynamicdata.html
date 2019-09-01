@@ -204,22 +204,14 @@
     $('#editar').fadeOut();
     $('#inputtarjeta').fadeOut();
     $('#front').fadeOut();
-    $.get("./productos.txt", function(response) {
+    $.getJSON("productos.json", function(response) {
      var sel = $('<table>').attr('id', "edittable").appendTo('#editdiv');
-     var prodfile = response;
-     var categoriasitem = prodfile.split('/');
-     var productos = [];
-     var subcategorias = [];
-     for (var i = 0; i<categoriasitem.length; i++) {
-       subcategorias.push(categoriasitem[i].substring(0, categoriasitem[i].indexOf('.')));
-       sel.append($("<tr>"));
-       var productostemp = categoriasitem[i].substring(categoriasitem[i].indexOf('.')+1).split(',');
-       for(var j = 0; j<productostemp.length; j++) {
-         sel.append($("<tr>").attr('value',productostemp[j]).text(productostemp[j].split('|')[0]));
-         sel.append($("<td>").append($("<input>").attr('id',productostemp[j].split('|')[0]).attr('value', productostemp[j].split('|')[1]).attr('type', 'number')));
+     $.each(response, function(categoria){
+       for (var i = 0; i<response[categoria].length; i++) {
+         console.log(response[categoria][i].nombre);
+         sel.append($("<tr>").text(response[categoria][i].nombre).append($("<td>").append($("<input>").attr("value", response[categoria][i].valor))).append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'Quitar'}))));
        }
-       console.log(productostemp);
-     }
+     })
     });
     $('#edittable').fadeIn();
     $('#guardarcambios').fadeIn();
@@ -229,7 +221,6 @@
   $('#cliente').hide();
   $('#cargarpuntos').hide();
   $('#usarpuntos').hide();
-  $('#editable').hide();
   $('#guardarcambios').hide();
 
   //FUNCIONES PARA REGISTRAR CONSUMO
@@ -237,22 +228,20 @@
   $('#cargar').click( function() {
     //CARGO DINAMICAMENTE LOS PRODUCTOS
     $.getJSON("productos.json", function(response) {
-     var sel = $('<select>').attr('id', "items").attr('size', "15").appendTo('#contenedoritems1');
-     var prodfile = response;
-     console.log(Object.keys(response).length);
+     var sel = $('<select>').attr('id', "items").attr('size', "20").appendTo('#contenedoritems1');
      $.each(response, function(categoria){
-       console.log(categoria);
        sel.append($("<optgroup>").attr('label',categoria));
-       console.log(response[categoria]);
        for (var i = 0; i<response[categoria].length; i++) {
          sel.append($("<option>").attr('value', [response[categoria][i].valor,response[categoria][i].dbid]).text(response[categoria][i].nombre));
        }
      })
+     //CUANDO HAGO DOBLE CLICK A UN PRODUCTO
      $('#items').dblclick(function() {
        itemval = $(this).val().split(',');
        consumos[itemval[1]]++;
-       console.log($(this).text());
-       var markup = "<tr class='" + itemval[1] + "'><td>" + $(this).text() + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemval[0] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+       console.log(consumos);
+       //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
+       var markup = "<tr class='" + itemval[1] + "'><td>" + $('#items option:selected').text() + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemval[0] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
        $("#listaitems tr:last").prev('tr').after(markup);
        var montototal = Number(itemval[0]) + Number($('#totalmonto').html());
        $('#totalmonto').html(montototal);
@@ -264,22 +253,20 @@
   $('#usar').click( function() {
     //CARGO DINAMICAMENTE LOS PRODUCTOS
     $.getJSON("productos.json", function(response) {
-     var sel = $('<select>').attr('id', "items").attr('size', "15").appendTo('#contenedoritems2');
-     var prodfile = response;
-     console.log(Object.keys(response).length);
+     var sel = $('<select>').attr('id', "items").attr('size', "20").appendTo('#contenedoritems2');
      $.each(response, function(categoria){
-       console.log(categoria);
        sel.append($("<optgroup>").attr('label',categoria));
-       console.log(response[categoria]);
        for (var i = 0; i<response[categoria].length; i++) {
          sel.append($("<option>").attr('value', [response[categoria][i].valor,response[categoria][i].dbid]).text(response[categoria][i].nombre));
        }
      })
+     //CUANDO HAGO DOBLE CLICK A UN PRODUCTO
      $('#items').dblclick(function() {
        itemval = $(this).val().split(',');
        consumos[itemval[1]]++;
-       console.log($(this).text());
-       var markup = "<tr class='" + itemval[1] + "'><td>" + $(this).text() + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemval[0] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
+       console.log(consumos);
+       //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
+       var markup = "<tr class='" + itemval[1] + "'><td>" + $('#items option:selected').text() + "</td><td><span class='cantitem' style='color:white'>1</span><input class='sumarmismoitem' type='button' value='+'><input class='quitarmismoitem' type='button' value='-'></td><td class='monto'>" + itemval[0] + "</td><td> <input class='quitardelista' type='button' value='Quitar'></td></tr>";
        $("#listaitems2 tr:last").prev('tr').after(markup);
        var montototal = Number(itemval[0]) + Number($('#totalmonto2').html());
        $('#totalmonto2').html(montototal);
