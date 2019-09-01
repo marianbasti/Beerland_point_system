@@ -1,76 +1,70 @@
-PAPAS.Papas Beerland|80|6
-[
 {
-  "nombre": "Rubia",
-  "valor": 70,
-  "dbid": 0,
-  "categoria": "cervezas"
+  "Cervezas": [
+    {
+      "nombre": "Rubia",
+      "valor": 70,
+      "dbid": 0
+    },
+    {
+      "nombre": "Negra",
+      "valor": 85,
+      "dbid": 1
+    },
+    {
+      "nombre": "Roja",
+      "valor": 75,
+      "dbid": 2
+    },
+    {
+      "nombre": "Temporada",
+      "valor": 95,
+      "dbid": 3
+    }
+  ],
+  "Comidas": [
+    {
+      "nombre": "Hamburguesa Beerland",
+      "valor": 260,
+      "dbid": 6
+    },
+    {
+      "nombre": "Hamburguesa New York",
+      "valor": 290,
+      "dbid": 6
+    },
+    {
+      "nombre": "Sandwich Rústico",
+      "valor": 310,
+      "dbid": 6
+    }
+  ],
+  "Papas": [
+    {
+      "nombre": "Papas Beerland",
+      "valor": 240,
+      "dbid": 6
+    },
+    {
+      "nombre": "Papas Magic",
+      "valor": 260,
+      "dbid": 6
+    }
+  ],
+  "Bebidas sin alcohol": [
+    {
+      "nombre": "Gaseosa",
+      "valor": 70,
+      "dbid": 5
+    },
+    {
+      "nombre": "Jugo de naranja",
+      "valor": 75,
+      "dbid": 5
+    },
+    {
+      "nombre": "Jugo de sauco",
+      "valor": 70,
+      "dbid": 5
+    }
+  ]
 }
-{
-  "nombre": "Negra",
-  "valor": 85,
-  "dbid": 1,
-  "categoria": "cervezas"
-}
-{
-  "nombre": "Roja",
-  "valor": 75,
-  "dbid": 2,
-  "categoria": "cervezas"
-}
-{
-  "nombre": "Temporada",
-  "valor": 95,
-  "dbid": 3,
-  "categoria": "cervezas"
-}
-{
-  "nombre": "Hamburguesa Beerland",
-  "valor": 260,
-  "categoriaid": 6,
-  "categoria": "comidas"
-}
-{
-  "nombre": "Hamburguesa New York",
-  "valor": 290,
-  "categoriaid": 6,
-  "categoria": "comidas"
-}
-{
-  "nombre": "Sandwich Rústico",
-  "valor": 310,
-  "categoriaid": 6,
-  "categoria": "comidas"
-}
-{
-  "nombre": "Gaseosa",
-  "valor": 70,
-  "categoriaid": 5,
-  "categoria": "salcohol"
-}
-{
-  "nombre": "Jugo de naranja",
-  "valor": 75,
-  "categoriaid": 5,
-  "categoria": "salcohol"
-}
-{
-  "nombre": "Jugo de sauco",
-  "valor": 70,
-  "categoriaid": 5,
-  "categoria": "salcohol"
-}
-{
-  "nombre": "Papas Beerland",
-  "valor": 240,
-  "categoriaid": 6,
-  "categoria": "comidas"
-}
-{
-  "nombre": "Papas Magic",
-  "valor": 260,
-  "categoriaid": 6,
-  "categoria": "comidas"
-}
-
-]

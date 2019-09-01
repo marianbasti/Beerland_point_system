@@ -93,12 +93,8 @@ app.get('/beerland.png', function (req, res) {
   res.sendFile(__dirname + '/beerland.png');
 });
 
-app.get('/productos', function (req, res) {
-  res.sendFile(__dirname + '/productos.html');
-});
-
-app.get('/productos.txt', function (req, res) {
-  res.sendFile(__dirname + '/productos.txt');
+app.get('/productos.json', function (req, res) {
+  res.sendFile(__dirname + '/productos.json');
 });
 
 //CUANDO ME PIDEN REGISTRAR UN CLIENTE
