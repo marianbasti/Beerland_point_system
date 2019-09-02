@@ -200,22 +200,6 @@
 
 <script type="text/javascript">
 
-  $('#editar').on('click', function() {
-    $('#editar').fadeOut();
-    $('#inputtarjeta').fadeOut();
-    $('#front').fadeOut();
-    $.getJSON("productos.json", function(response) {
-     var sel = $('<table>').attr('id', "edittable").appendTo('#editdiv');
-     $.each(response, function(categoria){
-       for (var i = 0; i<response[categoria].length; i++) {
-         console.log(response[categoria][i].nombre);
-         sel.append($("<tr>").text(response[categoria][i].nombre).append($("<td>").append($("<input>").attr("value", response[categoria][i].valor))).append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'Quitar'}))));
-       }
-     })
-    });
-    $('#edittable').fadeIn();
-    $('#guardarcambios').fadeIn();
-  })
   //ARRAY PARA LLEVAR CUENTA DE LO QUE SE ENLISTA
   var consumos = [0,0,0,0,0,0,0];
   $('#cliente').hide();
@@ -346,8 +330,6 @@
       $('#totalmonto2').html(montototal.toString());
     }
   });
-
-
 
   //CREO FORM PARA MANDAR CON LOS DATOS
   //SUMAR
@@ -481,6 +463,34 @@
   $('#eliminar').click( function() {
     $("#body").load("./eliminar");
   });
+
+  //FUNCIONALIDAD DE EDITAR PRODUCTOS (guardados en un json)
+  $('#editar').on('click', function() {
+    $('#editar').fadeOut();
+    $('#inputtarjeta').fadeOut();
+    $('#front').fadeOut();
+    $.getJSON("productos.json", function(response) {
+     var sel = $('<table>').attr('id', "edittable").appendTo('#editdiv');
+     sel.append($("<tr>").text("ITEM"));
+     $("tr:last").append($("<td>").text("PRECIO"));
+     $("tr:last").append($("<td>").text("CATEGORIA"));
+     $.each(response, function(categoria){
+       console.log(categoria);
+       for (var i = 0; i<response[categoria].length; i++) {
+         sel.append($("<tr>").text(response[categoria][i].nombre));
+         $("tr:last").append($("<td>").append($("<input>").attr("value", response[categoria][i].valor)));
+         $("tr:last").append($("<td>").text(categoria));
+         $("tr:last").append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'Quitar'})));
+       }
+     })
+
+    });
+    $('#edittable').fadeIn();
+    $('#guardarcambios').fadeIn();
+    $('#guardarcambios').on('click', function() {
+      
+    })
+  })
 
   jQuery(function($){
     //CREO SOCKET
