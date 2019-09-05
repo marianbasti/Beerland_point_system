@@ -286,6 +286,7 @@ app.post("/sumar", function (req, res) {
    return res.redirect('/exito');
   });
 
+
 io.on('connection', function(socket){
   //CUANDO ME PIDEN LOS DATOS DE UN CLIENTE POR TARJETA
   socket.on('cargarcliente', function(tarjeta){
@@ -303,6 +304,15 @@ io.on('connection', function(socket){
      }
    });
  });
+ //CUANDO EDITAN LOS PRODUCTOS
+ socket.on('update', function(updated){
+   var json = JSON.stringify(updated);
+   fs.writeFile('productos.json', json, 'utf8', function callback(err) {
+     console.log(err);
+   });
+   socket.emit('reload', true);
+ });
+
 /*
  socket.on('usuarioapp', function(docypass) {
    validardatos

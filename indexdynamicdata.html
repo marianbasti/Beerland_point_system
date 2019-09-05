@@ -476,26 +476,48 @@
     $('#inputtarjeta').fadeOut();
     $('#front').fadeOut();
     $.getJSON("productos.json", function(response) {
+      console.log(response);
      var sel = $('<table>').attr('id', "edittable").appendTo('#editdiv');
      sel.append($("<tr>").text("ITEM"));
      $("tr:last").append($("<td>").text("PRECIO"));
      $("tr:last").append($("<td>").text("CATEGORIA"));
      $.each(response, function(categoria){
-       console.log(categoria);
        for (var i = 0; i<response[categoria].length; i++) {
          sel.append($("<tr>").text(response[categoria][i].nombre));
          $("tr:last").append($("<td>").append($("<input>").attr("value", response[categoria][i].valor)));
          $("tr:last").append($("<td>").text(categoria));
          $("tr:last").append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'Quitar'})));
+         $("tr:last").append($("<span>").attr({style: 'opacity:0'}).html(response[categoria][i].dbid));
        }
      })
 
+     $('#guardarcambios').on('click', function() {
+       var updated = new Object();
+       var table = $('#edittable');
+       table.children().each(function(i,o){
+         updated[$(this).find(':last-child').prev().prev().text()] = [];
+       });
+       table.children().each(function(i,o){
+        //console.log(updated);
+        var item = $(this).clone().children().remove().end().text();
+        var valor = $(this).find('input').val();
+        var dbid = $(this).find('span').text();
+        itempush = {'nombre': item, 'valor': Number(valor), 'dbid': Number(dbid)};
+
+        updated[$(this).find(':last-child').prev().prev().text()].push(itempush);
+        //console.log($(this).find('td input').val());
+      });
+        delete updated.PRECIO;
+        delete updated[""];
+        console.log(updated);
+        var socket = io.connect('http://localhost:4000');
+        socket.emit('update', updated);
+        window.location.reload();
+     });
     });
+
     $('#edittable').fadeIn();
     $('#guardarcambios').fadeIn();
-    $('#guardarcambios').on('click', function() {
-
-    })
   })
 
   jQuery(function($){
