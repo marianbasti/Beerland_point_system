@@ -310,7 +310,6 @@ io.on('connection', function(socket){
    fs.writeFile('productos.json', json, 'utf8', function callback(err) {
      console.log(err);
    });
-   socket.emit('reload', true);
  });
 
 /*
