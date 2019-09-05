@@ -28,6 +28,12 @@
         height: 20%;
         bottom: 1%
       }
+      .botonfijo {
+        position: fixed;
+        bottom: 6vh;
+        height: 5vh;
+        right: 5vh
+      }
       .front {
         position: fixed;
         opacity: 100%;
@@ -91,6 +97,7 @@
       .sumarmismoitem {text-align:center; position:absolute; right: 30%; width:5%; height: 4vh; background-color: #109010; color: white}
       .quitarmismoitem {text-align:center;position: absolute; right: 25%;width:5%; height: 4vh; background-color: #901010; color: white}
       .total {text-align: center;}
+      input[type=text],input[type=number],input[type=date] {color: white; background-color: transparent}
       select {
         width:100%;
         background-color: #101010;
@@ -194,7 +201,7 @@
 
     <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:1000'>
     <div id='editdiv' style='z-index:997'>
-      <input type="button" id="guardarcambios" value="Guardar cambios">
+      <input class='botonfijo' type="button" id="guardarcambios" value="Guardar cambios">
     </div>
 
   </body>
@@ -483,8 +490,8 @@
      $("tr:last").append($("<td>").text("CATEGORIA"));
      $.each(response, function(categoria){
        for (var i = 0; i<response[categoria].length; i++) {
-         sel.append($("<tr>").text(response[categoria][i].nombre));
-         $("tr:last").append($("<td>").append($("<input>").attr("value", response[categoria][i].valor)));
+         sel.append($("<tr>").append($("<input>").attr('type', 'text').val(response[categoria][i].nombre)));
+         $("tr:last").append($("<td>").append($("<input>").attr('type', 'number').attr("value", response[categoria][i].valor)));
          $("tr:last").append($("<td>").text(categoria));
          $("tr:last").append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'Quitar'})));
          $("tr:last").append($("<span>").attr({style: 'opacity:0'}).html(response[categoria][i].dbid));
@@ -499,8 +506,8 @@
        });
        table.children().each(function(i,o){
         //console.log(updated);
-        var item = $(this).clone().children().remove().end().text();
-        var valor = $(this).find('input').val();
+        var item = $(this).find('input').val();
+        var valor = $(this).find('input').eq(1).val();
         var dbid = $(this).find('span').text();
         itempush = {'nombre': item, 'valor': Number(valor), 'dbid': Number(dbid)};
 
@@ -512,7 +519,10 @@
         console.log(updated);
         var socket = io.connect('http://localhost:4000');
         socket.emit('update', updated);
-        window.location.reload();
+        alert("Productos actualizados!");
+        setTimeout(function(){
+          window.location.reload();
+        }, 100);
      });
     });
 
