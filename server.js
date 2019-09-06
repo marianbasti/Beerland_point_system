@@ -93,6 +93,10 @@ app.get('/beerland.png', function (req, res) {
   res.sendFile(__dirname + '/beerland.png');
 });
 
+app.get('/preloader', function (req, res) {
+  res.sendFile(__dirname + '/preloader.svg');
+});
+
 app.get('/productos.json', function (req, res) {
   res.sendFile(__dirname + '/productos.json');
 });
