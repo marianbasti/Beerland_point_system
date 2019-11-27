@@ -1,0 +1,7 @@
+mesas cantidad de cubiertos
+mesas hora de ingreso
+metodo de pago, cuotas si credito, quien atendio
+agregar o quitar mesas
+interfaz caja, mesero, cocina
+generar ticket fiscal 
+interfaz revisar regitro de todo(filtrado por comidas, mesas facturas, mozo)
