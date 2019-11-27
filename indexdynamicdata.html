@@ -54,7 +54,6 @@
       }
       .cliente {
         position: fixed;
-        opacity: 0%;
       	left: 0px;
       	top: 0px;
       	width: 100%;
@@ -64,7 +63,6 @@
       }
       .contenedor {
         position: fixed;
-        opacity: 0%;
       	left: 5%;
       	top: 10%;
       	width: 60%;
@@ -133,7 +131,7 @@
         <input class="botones3" style='background-color:#c90a00; border:#c90a00' type="button" id="eliminarthis" value="Eliminar este cliente">
       </div>
       <div class="contenedor" id="contenedor">
-        <table style="width:100%; margin: 0px; opacity: 0%">
+        <table style="width:100%; margin: 0px">
           <tr>
             <th>Documento: </th>
             <td id="documento"></td>
@@ -153,7 +151,6 @@
         </table>
       </div>
     </div>
-
 
     <div class="cliente" id='cargarpuntos'>
       <form class="contenedor" method="post">
@@ -297,8 +294,8 @@
       }
     });
   });
-  //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
 
+  //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
   //QUITAR ITEM
   $('#listaitems').on('click', '.quitardelista', function(){
     var montototal = Number($('#totalmonto').html()) - Number($(this).parent().parent().find('.monto').html());
@@ -598,6 +595,7 @@
     });
     socket.on('datoscliente', function(cliente){
       yeet();
+      console.log("Cargando cliente: " + cliente[0].documento);
       $('#cliente').fadeIn('fast');
       $('#editar').hide();
       $('#documento').html(cliente[0].documento);
