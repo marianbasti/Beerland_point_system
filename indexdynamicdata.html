@@ -72,7 +72,6 @@
       }
       .listaitems {
         text-align: left;
-        opacity: 50%;
         width: 100%;
       }
       .listaitems td:first-child { width:50%}
@@ -611,7 +610,6 @@
       });
     })
     socket.on('reload', function(a) {
-
       window.location.reload();
     })
   });
@@ -622,5 +620,12 @@
 
   $( document ).ready(function() {
     $('.preloader').fadeOut();
+    $(document).keyup(function(e) {
+      if (e.keyCode == 27) {
+          window.location.reload();
+      }
+    });
   });
+
+
 </script>
