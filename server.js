@@ -93,6 +93,22 @@ app.get('/beerland.png', function (req, res) {
   res.sendFile(__dirname + '/beerland.png');
 });
 
+app.get('/gorra.jpg', function (req, res) {
+  res.sendFile(__dirname + '/premios/gorra.jpg');
+});
+
+app.get('/remera.jpg', function (req, res) {
+  res.sendFile(__dirname + '/premios/remera.jpg');
+});
+
+app.get('/growler.jpg', function (req, res) {
+  res.sendFile(__dirname + '/premios/growler.jpg');
+});
+
+app.get('/destapador.jpg', function (req, res) {
+  res.sendFile(__dirname + '/premios/destapador.jpg');
+});
+
 app.get('/preloader', function (req, res) {
   res.sendFile(__dirname + '/preloader.svg');
 });
@@ -246,28 +262,12 @@ app.post("/sumar", function (req, res) {
      var puntosNuevos = puntos[0].puntos - req.body.monto*multiplier;
      var db_query= "UPDATE `clientes` SET puntos = ? WHERE tarjeta = ?"
      db.query(db_query, [puntosNuevos, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET rubia = rubia + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.rubia, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET negra = negra + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.negra, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET roja = roja + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.roja, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET temporada = temporada + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.temporada, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET otroalcohol = otroalcohol + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.otroalcohol, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET salcohol = salcohol + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.salcohol, req.body.tarjeta]);
-     var db_query= "UPDATE `clientes` SET comida = comida + ? WHERE tarjeta = ?"
-     db.query(db_query, [req.body.comida, req.body.tarjeta]);
-
-
      /*printer.tableCustom([
        { text:"BEERLAND", align:"CENTER", bold: true }
      ]);*/
      printer.newLine();
      printer.tableCustom([
-       { text:"Usaste", align:"CENTER" }
+       { text:"Canjeaste", align:"CENTER" }
      ]);
      printer.tableCustom([
        { text:req.body.monto*multiplier + " puntos.", align:"CENTER"}
