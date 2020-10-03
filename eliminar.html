@@ -18,6 +18,8 @@
     </style>
   </head>
   <body>
+    <input type="button" id="inicio" value="Inicio" onclick="location.reload()" style='position:fixed;left:0%;top:0%;z-index:1000;margin:1vh'>
+
     <form class="contenedor" action="/eliminar" method="post" id='formulario'>
       <input type="number" name='documento' id="documento" placeholder="Documento del cliente" autofocus>
       <input type="button" id='eliminar' value="Eliminar">

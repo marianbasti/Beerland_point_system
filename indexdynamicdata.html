@@ -71,19 +71,18 @@
         background-color: #0D0000
       }
       .contenedor {
-        position: fixed;
+        position: absolute;
       	left: 5%;
       	top: 10%;
       	width: 60%;
       	height: 50%;
         z-index: 999;
+        overflow-y: auto;
         background-color: transparent
       }
       .listaitems {
         text-align: left;
         width: 100%;
-        margin-top: 6vh;
-        margin-bottom: 24vh;
       }
       .listaitems td:first-child { width:50%}
       .listaitems td:last-child { width:10%}
@@ -183,7 +182,7 @@
       <div class="botonescli">
         <input class="botones3" type="button" id="cargar" value="Cargar puntos">
         <input class="botones3" type="button" id="usar" value="Usar puntos">
-        <input class="botones3" style='background-color:#c90a00; border:#c90a00' type="button" id="eliminarthis" value="Eliminar este cliente">
+        <input class="botones3" style='background-image:linear-gradient(to bottom, red, #d54d4d); border:#c90a00' type="button" id="eliminarthis" value="Eliminar este cliente">
       </div>
       <div class="contenedor" id="contenedor">
         <table style="width:100%; margin: 0px">
@@ -208,7 +207,7 @@
     </div>
 
     <div class="cliente" id='cargarpuntos'>
-      <form class="contenedor" method="post">
+      <form id="itemtable" class="contenedor" method="post">
         <table class='listaitems' id='listaitems'>
           <tr>
             <th>Item</th>
@@ -223,8 +222,8 @@
             <th> </th>
           </tr>
         </table>
-        <input style='position:absolute; right:0%' type="button" id="enviarpuntos" value="Cargar">
       </form>
+      <input style='position:absolute; right:0%; margin: 1vh' type="button" id="enviarpuntos" value="Cargar">
 
       <div class="items" id='contenedoritems1'>
 
@@ -256,8 +255,8 @@
 
     <div class='front' id='front'>
       <div class="botonesfront">
-        <input class="botones2" style='background-color:#00cc00; border:#00cc00' type="button" id="registrar" value="Registrar usuario nuevo">
-        <input class="botones2" style='background-color:#c90a00; border:#c90a00' type="button" id="eliminar" value="Eliminar cliente">
+        <input class="botones2" style='color:white; background-image:linear-gradient(to bottom, green, #4dd54d); border:#00cc00; border-radius:5px' type="button" id="registrar" value="Registrar nuevo">
+        <input class="botones2" style='color:white; background-image:linear-gradient(to bottom, red, #d54d4d); border:#c90a00; border-radius:5px' type="button" id="eliminar" value="Eliminar cliente">
       </div>
       <div style="padding-top: 10%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
     </div>
@@ -309,6 +308,7 @@
        $("#listaitems tr:last").prev('tr').after(markup);
        var montototal = Number(itemval[0]) + Number($('#totalmonto').html());
        $('#totalmonto').html(montototal);
+       $('#itemtable').scrollTop = $('#itemtable').scrollHeight;
      })
     });
     $('#cargarpuntos').fadeIn('slow');
@@ -341,14 +341,6 @@
     $('#usarpuntos').fadeIn('slow');
     $('#cliente').fadeOut('slow');
     $('#puntosdisponibles').html($('#puntos').html());
-    $("body").on('DOMSubtreeModified', "#listaitems2", function() {
-      if ( Number($('#totalmonto2').html()) > Number($('#puntosdisponibles').html())) {
-        alert("Puntos excedidos!");
-        $('#enviarpuntosgastados').prop('disabled', true);
-      } else {
-        $('#enviarpuntosgastados').prop('disabled', false);
-      }
-    });
   });
 
   //AÑADIR ITEM CON SU NOMBRE, COSTO Y BOTON DE QUITAR
@@ -470,23 +462,27 @@
   });
   //USAR
   function gastar(cant) {
+    if (cant < $('#puntos').html() ) {
       if (confirm("Canjear " + cant + " puntos?")) {
-      event.preventDefault();
-      var puntosForm = jQuery('<form>', {
-          'action': '/gastar',
-          'method': 'post'
-      }).append(jQuery('<input>', {
-          'name': 'tarjeta',
-          'value': $('#tarjeta').html(),
-          'type': 'hidden'
-      }));
-      puntosForm.append(jQuery('<input>', {
-          'name': 'monto',
-          'value': cant,
-          'type': 'hidden'
-      }));
-      $(document.body).append(puntosForm);
-      puntosForm.submit();
+        event.preventDefault();
+        var puntosForm = jQuery('<form>', {
+            'action': '/gastar',
+            'method': 'post'
+        }).append(jQuery('<input>', {
+            'name': 'tarjeta',
+            'value': $('#tarjeta').html(),
+            'type': 'hidden'
+        }));
+        puntosForm.append(jQuery('<input>', {
+            'name': 'monto',
+            'value': cant,
+            'type': 'hidden'
+        }));
+        $(document.body).append(puntosForm);
+        puntosForm.submit();
+      }
+    } else {
+      alert("Puntos insuficientes para este canje!");
     }
   }
 
