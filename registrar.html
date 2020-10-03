@@ -19,7 +19,8 @@
     </style>
   </head>
   <body>
-    <form autocomplete="off" class="contenedor" action="/registrar" method="post" id='formularioregistro'>
+    <input type="button" id="inicio" value="Inicio" onclick="location.reload()" style='position:fixed;left:0%;top:0%;z-index:1000;margin:1vw'>
+    <form autocomplete="off" class="contenedor" action="/registrar" method="post" id='formularioregistro' style="border-style: solid; border-width: 5px; border-radius: 5px;">
       <input type="number" name='documento' id="documento" placeholder="Documento del cliente" autofocus> <img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="date" name='nacimiento' id="nacimiento"> <img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <select name='sexo' id='sexo' style='width:30%'>

@@ -6,9 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
       body {font: 4vh calibri; color: white; background-image: url('beerland.png'); font-size: 4vh; background-color: black; background-repeat: no-repeat; background-attachment: fixed; background-position: center}
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+          /* display: none; <- Crashes Chrome on hover */
+          -webkit-appearance: none;
+          margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      }
+      input[type=number] {
+          -moz-appearance:textfield; /* Firefox */
+      }
       .botones3 {
         font-size: 6vh;
-        width: 33%;
+        width: 32%;
         height: 100%;
       }
       .botones2 {
@@ -73,6 +82,8 @@
       .listaitems {
         text-align: left;
         width: 100%;
+        margin-top: 6vh;
+        margin-bottom: 24vh;
       }
       .listaitems td:first-child { width:50%}
       .listaitems td:last-child { width:10%}
@@ -209,7 +220,9 @@
       <div style="padding-top: 10%; text-align: center">DESLICE TARJETA PARA COMENZAR</div>
     </div>
 
-    <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:1000'>
+    <input type="button" id="inicio" value="Inicio" onclick="location.reload()" style='position:fixed;left:0%;top:0%;z-index:1000;margin:1vh'>
+    <input type="button" id="editar" value="Editar productos"style='position:fixed;right:0%;top:0%;z-index:1000;margin:1vh'>
+
     <div id='editdiv' style='z-index:997'>
       <input class='botonfijo' style='background-color:#00cc00; border:#00cc00' type="button" id="guardarcambios" value="Guardar cambios">
       <input class='botonfijo2' type="button" id="agregarproducto" value="Agregar Producto">
@@ -499,15 +512,15 @@
       console.log(response);
      var sel = $('<table>').attr('id', "edittable").attr('class','listaitems').appendTo('#editdiv');
      sel.append($("<tr>").text("ITEM"));
-     $("tr:last").append($("<td>").text("PRECIO"));
+     $("tr:last").append($("<td>").text("PRECIO").attr('style', 'width:10vw'));
      $("tr:last").append($("<td>").text("CATEGORIA"));
      $.each(response, function(categoria){
        for (var i = 0; i<response[categoria].length; i++) {
-         sel.append($("<tr>").append($("<input>").attr('type', 'text').val(response[categoria][i].nombre)));
-         $("tr:last").append($("<td>").append($("<input>").attr('type', 'number').attr("value", response[categoria][i].valor)));
+         sel.append($("<tr>").append($("<input>").attr({type:'text', style:'width:100%'}).val(response[categoria][i].nombre)));
+         $("tr:last").append($("<td>").append($("<input>").attr({type:'number', style:'text-align:left;align:left;width:100%'}).attr("value", response[categoria][i].valor)));
          $("tr:last").append($("<td>").text(categoria));
-         $("tr:last").append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'Quitar'})));
-         $("tr:last").append($("<span>").attr({style: 'opacity:0'}).html(response[categoria][i].dbid));
+         $("tr:last").append($("<td>").append($("<input>").attr({class:'quitardelista', type:'button', value:'X', style:'width:2vw; color:white; background-color:#FF0000'})).attr('style', 'width:2vw'));
+         $("tr:last").append($("<span>").attr({style: 'opacity:0;width:0%'}).html(response[categoria][i].dbid));
        }
      })
 
