@@ -78,7 +78,7 @@ app.get('/alert', function (req, res) {
 });
 
 app.get('/jquery-3.4.1.min.js', function (req, res) {
-  res.sendFile(__dirname + '/jquery-3.4.1.min.js');
+  res.sendFile(__dirname + '/jquery-3.5.1.js');
 });
 
 app.get('/jquery.sumtr.js', function (req, res) {
@@ -115,6 +115,10 @@ app.get('/preloader', function (req, res) {
 
 app.get('/productos.json', function (req, res) {
   res.sendFile(__dirname + '/productos.json');
+});
+
+app.get('/jquery-ui.js', function (req, res) {
+  res.sendFile(__dirname + '/jquery-ui-1.12.1/jquery-ui.js');
 });
 
 //CUANDO ME PIDEN REGISTRAR UN CLIENTE

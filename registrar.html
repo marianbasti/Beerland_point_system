@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style media="screen">
       body {
         left: 0px;
@@ -20,7 +21,7 @@
   </head>
   <body>
     <input type="button" id="inicio" value="Inicio" onclick="location.reload()" style='position:fixed;left:0%;top:0%;z-index:1000;margin:1vw'>
-    <form autocomplete="off" class="contenedor" action="/registrar" method="post" id='formularioregistro' style="border-style: solid; border-width: 5px; border-radius: 5px;">
+    <form class = "ui-widget" autocomplete="off" class="contenedor" action="/registrar" method="post" id='formularioregistro' style="margin-top: 4vh; width:98%; border-style: solid; border-width: 5px; border-radius: 5px;">
       <input type="number" name='documento' id="documento" placeholder="Documento del cliente" autofocus> <img id='alert1' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="date" name='nacimiento' id="nacimiento"> <img id='alert2' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <select name='sexo' id='sexo' style='width:30%'>
@@ -29,7 +30,7 @@
         <option value="f">Femenino</option>
         <option value="o">Otro</option>
       </select> <img id='alert3' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
-      <input type="text" name="localidad" id="localidad" placeholder="Localidad"> <img id='alert4' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
+      <input type="text" name="localidad" id="localidad" placeholder="Localidad"> <!--<h3 id="distancia"></h3>--> <img id='alert4' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="text" name="tarjeta" id="tarjeta" placeholder="Pase tarjeta para completar"> <img id='alert5' src="alert" alt="Alert" style="width:16px;height:16px;"><br>
       <input type="button" id='cargar' value="Cargar">
     </form>
@@ -40,6 +41,7 @@
   src="/jquery-3.4.1.min.js"></script>
 
 <script src="http://localhost:4000/socket.io/socket.io.js"></script>
+<script src="/jquery-ui.js"></script>
 
 <script type="text/javascript">
   $('#documento').on('input', function() {
@@ -60,10 +62,27 @@
     $('#alert3').hide('slow');
   })
   $('#localidad').on('input', function() {
-    if ($('#localidad').val().length < 2){
+    if ($('#localidad').val().length < 4){
       $('#alert4').show('slow');
     } else {
       $('#alert4').hide('slow');
+      $.get('https://api.openrouteservice.org/geocode/autocomplete?api_key=5b3ce3597851110001cf6248d337930d5470427fa0261b13f95c9803&text=' + $('#localidad').val(), function(response) {
+        var suggestions = [{}];
+        for (var i = 0; i<response.features.length; i++){
+          suggestions.push({"label":response.features[i].properties.label,"id":i,"coordinates":response.features[i].geometry.coordinates});
+        }
+        $( "#localidad" ).autocomplete({
+          source: suggestions,
+          /*select: function( event, ui ) {
+            console.log(ui);
+            $.get('https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf6248d337930d5470427fa0261b13f95c9803&start=' + ui.item.coordinates.toString() + '&end=-71.30822,-41.14557', function(response) {
+              console.log(response.features[0].properties.summary.distance);
+              $("#distancia").text("Distancia a Bariloche:" + response.features[0].properties.summary.distance + "metros");
+            })
+          }*/
+        });
+      })
+
     }
   })
   document.getElementById('cargar').addEventListener("click", function() {
